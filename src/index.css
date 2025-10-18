@@ -5,6 +5,12 @@ body {
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(
+    90deg,
+    #343333 38.05%,
+    #484848 69.22%,
+    #282828 98.98%
+  );
 }
 
 code {
