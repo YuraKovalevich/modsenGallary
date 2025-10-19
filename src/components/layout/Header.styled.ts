@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 export const HeaderWrapper = styled.header`
+  max-width: 1310px;
+  margin: 0 auto;
   height: 109px;
   display: grid;
   align-items: center;
