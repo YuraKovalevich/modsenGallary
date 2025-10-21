@@ -7,8 +7,9 @@ import {
   StyledImage,
 } from '../../pages/Images.styled';
 import FavoutitesLogo from '../../assets/FavoutitesLogo';
-import { type UnsplashImage } from '../common/FavoritesContext';
-import { useFavorites } from '../../hooks/UseFavorites';
+import { useFavorites } from '../../hooks/useFavorites';
+import type { UnsplashImage } from '../../services/unsplashApi';
+
 interface Props {
   image: UnsplashImage;
   onClick?: () => void;

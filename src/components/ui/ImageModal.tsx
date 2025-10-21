@@ -16,7 +16,7 @@ import FavoutitesLogo from '../../assets/FavoutitesLogo';
 import CloseBtn from './CloseBtn';
 import BtnLeft from './BtnLeft';
 import BtnRight from './BtnRight';
-import { useFavorites } from '../../hooks/UseFavorites';
+import { useFavorites } from '../../hooks/useFavorites';
 import { FavoriteButton } from '../../pages/Images.styled';
 
 interface Props {

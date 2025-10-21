@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Wrapper,
   BackgroundImage,
@@ -27,31 +27,46 @@ const FindImages: React.FC<FindImagesProps> = ({
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const isImagesPage = location.pathname === IMAGES_ROUTE;
 
-  const [localQuery, setLocalQuery] = useState(searchQuery);
+  const paramQuery = searchParams.get('search') || '';
+  const stateQuery = location.state?.searchQuery || '';
+  const initialQuery = paramQuery || stateQuery || searchQuery || '';
+
+  const [localQuery, setLocalQuery] = useState(initialQuery);
 
   useEffect(() => {
-    setLocalQuery(searchQuery);
-  }, [searchQuery]);
+    setLocalQuery(initialQuery);
+  }, [initialQuery, location.search]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = e.target.value;
     setLocalQuery(newQuery);
-    if (onSearchChange) onSearchChange(newQuery);
+    onSearchChange?.(newQuery);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedQuery = localQuery.trim();
-    if (!trimmedQuery) return;
+
+    if (!trimmedQuery) {
+      setLocalQuery('');
+      navigate(IMAGES_ROUTE, { replace: true });
+      onSearch?.('');
+      return;
+    }
 
     if (!isImagesPage) {
       navigate(`/images?search=${encodeURIComponent(trimmedQuery)}`, {
         state: { searchQuery: trimmedQuery },
       });
-    } else if (onSearch) {
-      onSearch(trimmedQuery);
+    } else {
+      navigate(`/images?search=${encodeURIComponent(trimmedQuery)}`, {
+        replace: true,
+        state: { searchQuery: trimmedQuery },
+      });
+      onSearch?.(trimmedQuery);
     }
   };
 

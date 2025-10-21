@@ -6,13 +6,13 @@ import {
 } from '../services/unsplashApi';
 import {
   GalleryContainer,
-  LoadingText,
   CategoryGrid,
   CategoryCard,
   CategoryImage,
   CategoryName,
 } from './Gallary.styled';
 import { GalleryWrapper } from './Images.styled';
+import Loader from '../components/ui/Loader';
 
 const categories = [
   'Art',
@@ -54,12 +54,12 @@ const Gallary = () => {
   }, []);
 
   const handleCategoryClick = (name: string) => {
-    navigate(`/images?q=${encodeURIComponent(name)}`, {
-      state: { searchQuery: '' },
+    navigate(`/images?search=${encodeURIComponent(name)}`, {
+      state: { searchQuery: name },
     });
   };
 
-  if (loading) return <LoadingText>Загрузка категорий...</LoadingText>;
+  if (loading) return <Loader />;
 
   return (
     <GalleryWrapper>

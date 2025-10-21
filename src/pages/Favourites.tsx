@@ -7,8 +7,8 @@ import {
   FavouritesText,
 } from './Favourites.styled';
 import ImageCardComponent from '../components/layout/ImageCard';
-import { useFavorites } from '../hooks/UseFavorites';
-import type { UnsplashImage } from '../components/common/FavoritesContext';
+import { useFavorites } from '../hooks/useFavorites';
+import type { UnsplashImage } from '../services/unsplashApi';
 
 const Favourites: React.FC = () => {
   const { favorites } = useFavorites();

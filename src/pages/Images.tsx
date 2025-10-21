@@ -21,8 +21,8 @@ const Images: React.FC<Props> = ({ searchQuery = '' }) => {
   const location = useLocation();
   const stateSearchQuery = location.state?.searchQuery || '';
   const [searchParams] = useSearchParams();
-  const categoryQuery = searchParams.get('q')?.trim() || '';
-  const query = categoryQuery || searchQuery || stateSearchQuery;
+  const searchParam = searchParams.get('search')?.trim() || '';
+  const query = searchParam || searchQuery || stateSearchQuery;
 
   const [images, setImages] = useState<UnsplashImage[]>([]);
   const [loading, setLoading] = useState(true);

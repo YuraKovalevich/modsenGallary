@@ -1,16 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-
-export interface UnsplashImage {
-  id: string;
-  urls: {
-    regular: string;
-    small: string;
-    full: string;
-  };
-  alt_description?: string;
-  description?: string;
-  user: { name: string };
-}
+import type { UnsplashImage } from '../../services/unsplashApi';
 
 interface FavoritesContextType {
   favorites: UnsplashImage[];

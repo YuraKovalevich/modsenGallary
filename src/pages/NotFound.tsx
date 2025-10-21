@@ -1,4 +1,3 @@
-import React from 'react';
 import { GalleryWrapper } from './Images.styled';
 import {
   NotFoundContainer,
