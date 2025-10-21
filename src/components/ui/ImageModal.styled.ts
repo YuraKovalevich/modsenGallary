@@ -75,7 +75,7 @@ export const ModalDescription = styled.div`
   border-radius: 0 0 8px 8px;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
     padding: 15px 20px;
   }
