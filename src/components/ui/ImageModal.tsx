@@ -8,6 +8,9 @@ import {
   ArrowButton,
   ModalDescription,
   ModalText,
+  ImageContainer,
+  ArrowsContainer,
+  SideArrow,
 } from './ImageModal.styled';
 import FavoutitesLogo from '../../assets/FavoutitesLogo';
 import CloseBtn from './CloseBtn';
@@ -37,6 +40,12 @@ const ImageModal: React.FC<Props> = ({
   const currentImage = images[currentIndex];
   const favorite = isFavorite(currentImage.id);
 
+  const truncateText = (text: string, maxLength: number) => {
+    if (!text) return 'No description';
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
+
   useEffect(() => {
     onBlurToggle(true);
 
@@ -56,31 +65,41 @@ const ImageModal: React.FC<Props> = ({
   return (
     <Overlay onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
-        <ArrowButton left onClick={onPrev}>
-          <BtnLeft />
-        </ArrowButton>
-        <div>
+        <ImageContainer>
           <ModalImage
             src={currentImage.urls.full}
             alt={currentImage.alt_description || 'Image'}
           />
-          <ModalDescription>
-            <ModalText>{currentImage.alt_description}</ModalText>
+          <CloseButton onClick={onClose}>
+            <CloseBtn />
+          </CloseButton>
 
-            <FavoriteButton
-              $isFavorite={favorite}
-              onClick={() => toggleFavorite(currentImage)}
-            >
-              <FavoutitesLogo />
-            </FavoriteButton>
-          </ModalDescription>
-        </div>
-        <ArrowButton onClick={onNext}>
-          <BtnRight />
-        </ArrowButton>
-        <CloseButton onClick={onClose}>
-          <CloseBtn />
-        </CloseButton>
+          <SideArrow left onClick={onPrev}>
+            <BtnLeft />
+          </SideArrow>
+          <SideArrow onClick={onNext}>
+            <BtnRight />
+          </SideArrow>
+        </ImageContainer>
+        <ModalDescription>
+          <ModalText>
+            {truncateText(currentImage.alt_description || '', 40)}
+          </ModalText>
+          <FavoriteButton
+            $isFavorite={favorite}
+            onClick={() => toggleFavorite(currentImage)}
+          >
+            <FavoutitesLogo />
+          </FavoriteButton>
+        </ModalDescription>
+        <ArrowsContainer>
+          <ArrowButton onClick={onPrev}>
+            <BtnLeft />
+          </ArrowButton>
+          <ArrowButton onClick={onNext}>
+            <BtnRight />
+          </ArrowButton>
+        </ArrowsContainer>
       </ModalContent>
     </Overlay>
   );

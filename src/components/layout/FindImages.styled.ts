@@ -105,11 +105,20 @@ export const SearchInput = styled.input`
 `;
 
 export const NoResultsText = styled.div`
+  max-width: 684px;
+  margin: 0 auto;
+  font-family: 'Lexend Deca';
   text-align: center;
-  font-size: 18px;
-  color: #666;
+  font-weight: 700;
+  font-size: 64px;
+  color: rgba(57, 57, 57, 1);
   padding: 60px 0;
-  font-family: 'Roboto', sans-serif;
+  span {
+    color: rgba(241, 121, 0, 1);
+  }
+  @media (max-width: 768px) {
+    font-size: 48px;
+  }
 `;
 
 export const SortContainer = styled.div`

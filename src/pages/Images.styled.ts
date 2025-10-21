@@ -174,6 +174,10 @@ export const SortContainer = styled.div`
   max-width: 1310px;
   margin-left: auto;
   margin-right: auto;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `;
 
 export const SortLabel = styled.span`

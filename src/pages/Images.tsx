@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { GalleryWrapper, GalleryContainer, LoadingText } from './Images.styled';
+import { GalleryWrapper, GalleryContainer } from './Images.styled';
 import {
   getRandomImages,
   searchImages,
@@ -11,6 +11,7 @@ import ImageGrid from '../components/layout/ImageGrid';
 import SortDropdown from '../components/common/SortDropdown';
 import Pagination from '../components/ui/Pagination';
 import ImageModal from '../components/ui/ImageModal';
+import Loader from '../components/ui/Loader';
 
 interface Props {
   searchQuery?: string;
@@ -75,9 +76,15 @@ const Images: React.FC<Props> = ({ searchQuery = '' }) => {
     if (modalIndex !== null) setModalIndex((modalIndex + 1) % images.length);
   };
 
-  if (loading) return <LoadingText>Loading images...</LoadingText>;
+  if (loading) return <Loader />;
   if (!images.length)
-    return <NoResultsText>No images found for "{query}"</NoResultsText>;
+    return (
+      <GalleryWrapper>
+        <NoResultsText>
+          The Search Didn't Yield Any Results, Please Try <span>Again</span>.
+        </NoResultsText>
+      </GalleryWrapper>
+    );
 
   return (
     <GalleryWrapper>
