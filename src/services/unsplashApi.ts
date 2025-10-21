@@ -7,8 +7,8 @@ export interface UnsplashImage {
     regular: string;
     full: string;
   };
-  alt_description: string;
-  description?: string;
+  alt_description: string | null;
+  description?: string | null;
   user: {
     name: string;
     username: string;
@@ -18,30 +18,58 @@ export interface UnsplashImage {
 
 export interface UnsplashCategoryImage {
   id: string;
-  urls: { small: string };
-  alt_description: string;
+  urls: {
+    regular?: string;
+    small?: string;
+  };
+  alt_description?: string | null;
+}
+
+export interface SearchResponse {
+  results: UnsplashImage[];
+  total: number;
+  total_pages: number;
+}
+
+const KEY =
+  (import.meta.env.VITE_UNSPLASH_ACCESS_KEY as string) ||
+  (import.meta.env.VITE_UNSPLASH_KEY as string) ||
+  '';
+
+if (!KEY) {
+  console.warn('error');
+}
+
+async function fetchWithErrorHandling(url: string, signal?: AbortSignal) {
+  const headers: Record<string, string> = {};
+  if (KEY) headers.Authorization = `Client-ID ${KEY}`;
+
+  const res = await fetch(url, { headers, signal });
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`API Error: ${res.status} ${res.statusText} ${text}`);
+  }
+  return res.json();
 }
 
 export async function getRandomImages(
-  page: number = 1,
-  perPage: number = 12
+  a: number = 12,
+  b?: number,
+  signal?: AbortSignal
 ): Promise<UnsplashImage[]> {
+  let perPage = 12;
+  if (b === undefined) {
+    perPage = a;
+  } else {
+    perPage = b;
+  }
+
   try {
-    const response = await fetch(
-      `${UNSPLASH_API_URL}/photos/random?count=${perPage}&page=${page}`,
-      {
-        headers: {
-          Authorization: `Client-ID ${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`,
-        },
-      }
+    const data = await fetchWithErrorHandling(
+      `${UNSPLASH_API_URL}/photos/random?count=${perPage}`,
+      signal
     );
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
+    return Array.isArray(data) ? data : [];
   } catch (error) {
     console.error('Error fetching random images:', error);
     return [];
@@ -51,52 +79,58 @@ export async function getRandomImages(
 export async function searchImages(
   query: string,
   page: number = 1,
-  perPage: number = 12
-): Promise<{ results: UnsplashImage[]; total: number }> {
+  perPage: number = 12,
+  sort: 'relevant' | 'latest' = 'relevant',
+  signal?: AbortSignal
+): Promise<SearchResponse> {
   try {
-    const response = await fetch(
-      `${UNSPLASH_API_URL}/search/photos?query=${query}&page=${page}&per_page=${perPage}`,
-      {
-        headers: {
-          Authorization: `Client-ID ${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`,
-        },
-      }
+    const encodedQuery = encodeURIComponent(query);
+    const data = await fetchWithErrorHandling(
+      `${UNSPLASH_API_URL}/search/photos?query=${encodedQuery}&page=${page}&per_page=${perPage}&order_by=${sort}`,
+      signal
     );
 
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-
-    const data = await response.json();
     return {
-      results: data.results,
-      total: data.total,
+      results: Array.isArray(data.results) ? data.results : [],
+      total: typeof data.total === 'number' ? data.total : 0,
+      total_pages: typeof data.total_pages === 'number' ? data.total_pages : 0,
     };
   } catch (error) {
     console.error('Error searching images:', error);
-    return { results: [], total: 0 };
+    return { results: [], total: 0, total_pages: 0 };
   }
 }
 
 export async function getCategoryImage(
-  category: string
+  category: string,
+  signal?: AbortSignal
 ): Promise<UnsplashCategoryImage | null> {
-  const response = await fetch(
-    `${UNSPLASH_API_URL}/search/photos?query=${category}&per_page=1`,
-    {
-      headers: {
-        Authorization: `Client-ID ${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`,
-      },
-    }
-  );
-
-  if (!response.ok) {
-    console.error(
-      `Ошибка при загрузке категории "${category}": ${response.status}`
+  try {
+    const encodedCategory = encodeURIComponent(category);
+    const data = await fetchWithErrorHandling(
+      `${UNSPLASH_API_URL}/search/photos?query=${encodedCategory}&per_page=1`,
+      signal
     );
+    return data.results?.[0] ?? null;
+  } catch (error) {
+    console.error(`Error fetching category image for "${category}":`, error);
     return null;
   }
+}
 
-  const data = await response.json();
-  return data.results[0] || null;
+export async function getFeaturedImages(
+  page: number = 1,
+  perPage: number = 12,
+  signal?: AbortSignal
+): Promise<UnsplashImage[]> {
+  try {
+    const data = await fetchWithErrorHandling(
+      `${UNSPLASH_API_URL}/photos?page=${page}&per_page=${perPage}&order_by=popular`,
+      signal
+    );
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error('Error fetching featured images:', error);
+    return [];
+  }
 }

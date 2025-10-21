@@ -1,112 +1,106 @@
 import { useEffect, useState } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
+import { GalleryWrapper, GalleryContainer, LoadingText } from './Images.styled';
 import {
   getRandomImages,
   searchImages,
   type UnsplashImage,
 } from '../services/unsplashApi';
-import {
-  GalleryContainer,
-  ImageGrid,
-  ImageCard,
-  Image,
-  ImageInfo,
-  ImageTitle,
-  FavoriteIconWrapper,
-  Pagination,
-  PageButton,
-  LoadingText,
-  ArrowButton,
-  GalleryWrapper,
-} from './Images.styled';
-import Favoutites from '../assets/FavoutitesLogo';
+import { NoResultsText } from '../components/layout/FindImages.styled';
+import ImageGrid from '../components/layout/ImageGrid';
+import SortDropdown from '../components/common/SortDropdown';
+import Pagination from '../components/ui/Pagination';
+import ImageModal from '../components/ui/ImageModal';
 
-interface ImageGalleryProps {
+interface Props {
   searchQuery?: string;
 }
 
-const Images = ({ searchQuery = '' }: ImageGalleryProps) => {
+const Images: React.FC<Props> = ({ searchQuery = '' }) => {
+  const location = useLocation();
+  const stateSearchQuery = location.state?.searchQuery || '';
+  const [searchParams] = useSearchParams();
+  const categoryQuery = searchParams.get('q')?.trim() || '';
+  const query = categoryQuery || searchQuery || stateSearchQuery;
+
   const [images, setImages] = useState<UnsplashImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [sortBy, setSortBy] = useState<'relevant' | 'latest'>('relevant');
+
+  const [modalIndex, setModalIndex] = useState<number | null>(null);
+  const [blur, setBlur] = useState(false);
 
   useEffect(() => {
     const loadImages = async () => {
       setLoading(true);
-
-      const [data] = await Promise.all([
-        (async () => {
-          if (searchQuery) {
-            const result = await searchImages(searchQuery, currentPage);
-            setTotalPages(Math.ceil(result.total / 12));
-            return result.results;
-          } else {
-            const data = await getRandomImages(currentPage);
-            setTotalPages(4);
-            return data;
-          }
-        })(),
-      ]);
-
-      setImages(data);
-      setLoading(false);
+      try {
+        if (query) {
+          const result = await searchImages(query, currentPage, 12, sortBy);
+          setImages(result.results);
+          setTotalPages(Math.min(result.total_pages, 4));
+        } else {
+          const data = await getRandomImages(currentPage, 12);
+          setImages(data);
+          setTotalPages(4);
+        }
+      } catch (err) {
+        console.error(err);
+        setImages([]);
+      } finally {
+        setLoading(false);
+      }
     };
-
     loadImages();
-  }, [currentPage, searchQuery]);
+  }, [query, currentPage, sortBy]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (loading) {
-    return <LoadingText>Loading...</LoadingText>;
-  }
+  const handleSortChange = (sort: 'relevant' | 'latest') => {
+    setSortBy(sort);
+    setCurrentPage(1);
+  };
+
+  const handleOpenModal = (index: number) => setModalIndex(index);
+  const handleCloseModal = () => setModalIndex(null);
+  const handlePrevImage = () => {
+    if (modalIndex !== null)
+      setModalIndex((modalIndex - 1 + images.length) % images.length);
+  };
+  const handleNextImage = () => {
+    if (modalIndex !== null) setModalIndex((modalIndex + 1) % images.length);
+  };
+
+  if (loading) return <LoadingText>Loading images...</LoadingText>;
+  if (!images.length)
+    return <NoResultsText>No images found for "{query}"</NoResultsText>;
 
   return (
     <GalleryWrapper>
-      <GalleryContainer>
-        <ImageGrid>
-          {images.map((image) => (
-            <ImageCard key={image.id}>
-              <Image
-                src={image.urls.regular}
-                alt={image.alt_description || 'Unsplash image'}
-              />
-              <ImageInfo>
-                <ImageTitle>
-                  {image.description ||
-                    image.alt_description ||
-                    'Beautiful image'}
-                </ImageTitle>
-                <FavoriteIconWrapper>
-                  <Favoutites />
-                </FavoriteIconWrapper>
-              </ImageInfo>
-            </ImageCard>
-          ))}
-        </ImageGrid>
-        {totalPages > 1 && (
-          <Pagination>
-            {[...Array(totalPages)].map((_, index) => {
-              const page = index + 1;
-              return (
-                <PageButton
-                  key={page}
-                  $active={currentPage === page}
-                  onClick={() => handlePageChange(page)}
-                >
-                  {page}
-                </PageButton>
-              );
-            })}
-            <ArrowButton
-              disabled={currentPage === totalPages}
-              onClick={() => handlePageChange(currentPage + 1)}
-            />
-          </Pagination>
-        )}
+      <SortDropdown sortBy={sortBy} onSortChange={handleSortChange} />
+      <GalleryContainer $blur={blur}>
+        <ImageGrid images={images} onImageClick={handleOpenModal} />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </GalleryContainer>
+
+      {modalIndex !== null && (
+        <ImageModal
+          images={images}
+          currentIndex={modalIndex}
+          onClose={handleCloseModal}
+          onPrev={handlePrevImage}
+          onNext={handleNextImage}
+          onBlurToggle={setBlur}
+        />
+      )}
     </GalleryWrapper>
   );
 };
