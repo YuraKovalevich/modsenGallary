@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
+
 import type { UnsplashImage } from '../../services/unsplashApi';
 
 interface FavoritesContextType {

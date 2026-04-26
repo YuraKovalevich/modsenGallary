@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import {
-  Wrapper,
-  BackgroundImage,
-  Container,
-  Title,
-  AccentText,
-  SearchContainer,
-  SearchInput,
-  SearchIcon,
-} from './FindImages.styled';
+
 import image from '../../assets/find.jpg';
 import FiSearch from '../../assets/FiSearch.png';
 import { IMAGES_ROUTE } from '../../constants/linkRoutes';
+import {
+  AccentText,
+  BackgroundImage,
+  Container,
+  SearchContainer,
+  SearchIcon,
+  SearchInput,
+  Title,
+  Wrapper,
+} from './FindImages.styled';
 
 interface FindImagesProps {
   searchQuery?: string;

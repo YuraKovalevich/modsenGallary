@@ -1,23 +1,24 @@
 import { useEffect } from 'react';
-import type { UnsplashImage } from '../../services/unsplashApi';
-import {
-  CloseButton,
-  ModalContent,
-  ModalImage,
-  Overlay,
-  ArrowButton,
-  ModalDescription,
-  ModalText,
-  ImageContainer,
-  ArrowsContainer,
-  SideArrow,
-} from './ImageModal.styled';
+
 import FavoutitesLogo from '../../assets/FavoutitesLogo';
-import CloseBtn from './CloseBtn';
-import BtnLeft from './BtnLeft';
-import BtnRight from './BtnRight';
 import { useFavorites } from '../../hooks/useFavorites';
 import { FavoriteButton } from '../../pages/Images.styled';
+import type { UnsplashImage } from '../../services/unsplashApi';
+import BtnLeft from './BtnLeft';
+import BtnRight from './BtnRight';
+import CloseBtn from './CloseBtn';
+import {
+  ArrowButton,
+  ArrowsContainer,
+  CloseButton,
+  ImageContainer,
+  ModalContent,
+  ModalDescription,
+  ModalImage,
+  ModalText,
+  Overlay,
+  SideArrow,
+} from './ImageModal.styled';
 
 interface Props {
   images: UnsplashImage[];
@@ -54,6 +55,7 @@ const ImageModal: React.FC<Props> = ({
       if (e.key === 'ArrowRight') onNext();
       if (e.key === 'Escape') onClose();
     };
+
     document.addEventListener('keydown', handleKeyDown);
 
     return () => {
@@ -70,21 +72,25 @@ const ImageModal: React.FC<Props> = ({
             src={currentImage.urls.full}
             alt={currentImage.alt_description || 'Image'}
           />
+
           <CloseButton onClick={onClose}>
             <CloseBtn />
           </CloseButton>
 
-          <SideArrow left onClick={onPrev}>
+          <SideArrow $left onClick={onPrev}>
             <BtnLeft />
           </SideArrow>
+
           <SideArrow onClick={onNext}>
             <BtnRight />
           </SideArrow>
         </ImageContainer>
+
         <ModalDescription>
           <ModalText>
             {truncateText(currentImage.alt_description || '', 40)}
           </ModalText>
+
           <FavoriteButton
             $isFavorite={favorite}
             onClick={() => toggleFavorite(currentImage)}
@@ -92,10 +98,12 @@ const ImageModal: React.FC<Props> = ({
             <FavoutitesLogo />
           </FavoriteButton>
         </ModalDescription>
+
         <ArrowsContainer>
           <ArrowButton onClick={onPrev}>
             <BtnLeft />
           </ArrowButton>
+
           <ArrowButton onClick={onNext}>
             <BtnRight />
           </ArrowButton>

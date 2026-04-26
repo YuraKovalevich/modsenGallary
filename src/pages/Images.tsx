@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { GalleryWrapper, GalleryContainer } from './Images.styled';
+
+import SortDropdown from '../components/common/SortDropdown';
+import { NoResultsText } from '../components/layout/FindImages.styled';
+import ImageGrid from '../components/layout/ImageGrid';
+import ImageModal from '../components/ui/ImageModal';
+import Loader from '../components/ui/Loader';
+import Pagination from '../components/ui/Pagination';
 import {
   getRandomImages,
   searchImages,
   type UnsplashImage,
 } from '../services/unsplashApi';
-import { NoResultsText } from '../components/layout/FindImages.styled';
-import ImageGrid from '../components/layout/ImageGrid';
-import SortDropdown from '../components/common/SortDropdown';
-import Pagination from '../components/ui/Pagination';
-import ImageModal from '../components/ui/ImageModal';
-import Loader from '../components/ui/Loader';
+import { GalleryContainer, GalleryWrapper } from './Images.styled';
 
 interface Props {
   searchQuery?: string;

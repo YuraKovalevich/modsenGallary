@@ -1,4 +1,5 @@
-import { type ReactNode, Component, type ErrorInfo } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
+
 import {
   ErrorText,
   ErrorTitle,

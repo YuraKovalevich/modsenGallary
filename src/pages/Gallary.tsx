@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import Loader from '../components/ui/Loader';
 import {
   getCategoryImage,
   type UnsplashCategoryImage,
 } from '../services/unsplashApi';
 import {
-  GalleryContainer,
-  CategoryGrid,
   CategoryCard,
+  CategoryGrid,
   CategoryImage,
   CategoryName,
+  GalleryContainer,
 } from './Gallary.styled';
 import { GalleryWrapper } from './Images.styled';
-import Loader from '../components/ui/Loader';
 
 const categories = [
   'Art',

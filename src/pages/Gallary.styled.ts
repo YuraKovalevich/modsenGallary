@@ -1,37 +1,38 @@
 import styled from 'styled-components';
 
 export const GalleryContainer = styled.div`
-  max-width: 1310px;
+  max-width: ${({ theme }) => theme.layout.containerMaxWidth};
   margin: 0 auto;
-  padding: 40px 15px;
+  padding: ${({ theme }) => theme.spacing.xxl}
+    ${({ theme }) => theme.spacing.sm};
 `;
 
 export const CategoryGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 26px;
+  gap: ${({ theme }) => theme.spacing.xl};
   justify-items: center;
 
-  @media (max-width: 900px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: ${({ theme }) => theme.spacing.lg};
   }
 `;
 
 export const CategoryCard = styled.div`
   position: relative;
   width: 100%;
-  max-width: 400px;
+  max-width: ${({ theme }) => theme.layout.categoryCardMaxWidth};
   aspect-ratio: 1 / 0.8;
-  border-radius: 1px;
+  border-radius: ${({ theme }) => theme.radius.none};
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: ${({ theme }) => theme.shadow.card};
 
   &::after {
     content: '';
@@ -56,33 +57,22 @@ export const CategoryImage = styled.img`
 
 export const CategoryName = styled.p`
   position: absolute;
-  bottom: 16px;
-  left: 20px;
-  right: 20px;
-  font-family: 'Roboto', sans-serif;
+  bottom: ${({ theme }) => theme.spacing.sm};
+  left: ${({ theme }) => theme.spacing.lg};
+  right: ${({ theme }) => theme.spacing.lg};
+
+  font-family: ${({ theme }) => theme.font.category};
   font-weight: 600;
-  font-size: 22px;
+  font-size: ${({ theme }) => theme.fontSize.categoryLg};
   color: #ffffff;
+
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
   margin: 0;
   z-index: 2;
 
-  @media (max-width: 600px) {
-    font-size: 20px;
-    bottom: 14px;
-    left: 16px;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: ${({ theme }) => theme.fontSize.categoryMd};
+    bottom: ${({ theme }) => theme.spacing.xs};
+    left: ${({ theme }) => theme.spacing.sm};
   }
-`;
-
-export const LoadingText = styled.p`
-  text-align: center;
-  font-size: 18px;
-  color: #666;
-  padding: 60px 0;
-`;
-
-export const GalleryWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
 `;

@@ -1,34 +1,35 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  HeaderWrapper,
-  HeaderContainer,
-  NavbarMenu,
-  MenuList,
-  MenuItem,
-  MenuLink,
-  StyledLink,
-  IconWrapper,
-  BurgerButton,
-  BurgerLine,
-  MobileMenu,
-  SocialIcons,
-  SocialLink,
-} from './Header.styled';
+
 import Category from '../../assets/CategoryLogo';
-import Images from '../../assets/ImagesLogo';
-import Logo from '../../assets/Logo';
-import Favourites from '../../assets/FavoutitesLogo';
-import Twitter from '../../assets/Twitter';
 import Facebook from '../../assets/Facebook';
-import Inst from '../../assets/Inst';
+import Favourites from '../../assets/FavoutitesLogo';
 import Github from '../../assets/Github';
+import Images from '../../assets/ImagesLogo';
+import Inst from '../../assets/Inst';
+import Logo from '../../assets/Logo';
+import Twitter from '../../assets/Twitter';
 import {
   CATEGORY_ROUTE,
   FAVOURITES_ROUTE,
   GALLERY_ROUTE,
   IMAGES_ROUTE,
 } from '../../constants/linkRoutes';
+import {
+  BurgerButton,
+  BurgerLine,
+  HeaderContainer,
+  HeaderWrapper,
+  IconWrapper,
+  MenuItem,
+  MenuLink,
+  MenuList,
+  MobileMenu,
+  NavbarMenu,
+  SocialIcons,
+  SocialLink,
+  StyledLink,
+} from './Header.styled';
 
 const Header = () => {
   const location = useLocation();

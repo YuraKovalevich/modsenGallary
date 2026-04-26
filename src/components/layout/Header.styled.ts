@@ -1,10 +1,10 @@
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 export const HeaderWrapper = styled.header`
-  max-width: 1310px;
+  max-width: ${({ theme }) => theme.layout.containerMaxWidth};
   margin: 0 auto;
-  height: 109px;
+  height: ${({ theme }) => theme.spacing.xxxl};
   display: grid;
   align-items: center;
   position: relative;
@@ -20,7 +20,7 @@ export const NavbarMenu = styled.nav`
   display: flex;
   align-items: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     display: none;
   }
 `;
@@ -28,7 +28,7 @@ export const NavbarMenu = styled.nav`
 export const MenuList = styled.ul`
   display: flex;
   align-items: center;
-  gap: 44px;
+  gap: ${({ theme }) => theme.spacing.xxl};
   list-style: none;
   margin: 0;
   padding: 0;
@@ -38,35 +38,37 @@ export const MenuItem = styled.li<{ $isActive?: boolean }>`
   .menu-link {
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: ${({ theme }) => theme.spacing.sm};
     text-decoration: none;
 
     path {
       fill: none;
-      stroke: ${(props) => (props.$isActive ? '#e0a449' : '#fffdfa')};
+      stroke: ${({ $isActive, theme }) =>
+        $isActive ? theme.colors.accent : theme.colors.textWhite};
       transition: stroke 0.3s ease;
     }
 
     span {
-      color: ${(props) => (props.$isActive ? '#e0a449' : '#fffdfa')};
+      color: ${({ $isActive, theme }) =>
+        $isActive ? theme.colors.accent : theme.colors.textWhite};
       transition: color 0.3s ease;
     }
 
-    &:hover span {
-      color: #e0a449;
-    }
+    &:hover span,
     &:hover path {
-      stroke: #e0a449;
+      color: ${({ theme }) => theme.colors.accent};
+      stroke: ${({ theme }) => theme.colors.accent};
     }
   }
 `;
 
 export const MenuLink = styled.span<{ $isActive?: boolean }>`
-  font-family: 'Roboto';
-  font-size: 24px;
+  font-family: ${({ theme }) => theme.font.secondary};
+  font-size: ${({ theme }) => theme.fontSize.xl};
   font-weight: 400;
   line-height: 100%;
-  color: ${(props) => (props.$isActive ? '#e0a449' : '#fffdfa')};
+  color: ${({ $isActive, theme }) =>
+    $isActive ? theme.colors.accent : theme.colors.textWhite};
   transition: color 0.3s ease;
 `;
 
@@ -80,21 +82,21 @@ export const IconWrapper = styled.div`
   display: flex;
   align-items: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     display: none;
   }
 `;
 
-export const BurgerButton = styled.div<{ $open?: boolean }>`
-  width: 30px;
-  height: 19px;
+export const BurgerButton = styled.div`
+  width: ${({ theme }) => theme.spacing.xl};
+  height: ${({ theme }) => theme.spacing.lg};
   display: none;
   flex-direction: column;
   justify-content: space-between;
   cursor: pointer;
-  z-index: 1001;
+  z-index: ${({ theme }) => theme.zIndex.modalContent};
 
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     display: flex;
   }
 `;
@@ -102,21 +104,23 @@ export const BurgerButton = styled.div<{ $open?: boolean }>`
 export const BurgerLine = styled.span<{ $open?: boolean }>`
   height: 3px;
   width: 100%;
-  background: #e0a449;
-  border-radius: 2px;
+  background: ${({ theme }) => theme.colors.accent};
+  border-radius: ${({ theme }) => theme.radius.sm};
   transition: all 0.3s ease;
 
   ${({ $open }) =>
     $open &&
     `
     &:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
+      transform: rotate(45deg) translate(4px, 4px);
     }
+
     &:nth-child(2) {
       opacity: 0;
     }
+
     &:nth-child(3) {
-      transform: rotate(-45deg) translate(6px, -6px);
+      transform: rotate(-45deg) translate(4px, -4px);
     }
   `}
 `;
@@ -128,49 +132,54 @@ export const MobileMenu = styled.div<{ $open?: boolean }>`
   width: 100%;
   background: linear-gradient(
     90deg,
-    #343333 38.05%,
-    #484848 69.22%,
-    #282828 98.98%
+    ${({ theme }) => theme.colors.bgDark},
+    #484848,
+    #282828
   );
+
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: ${({ theme }) => theme.spacing.lg};
   align-items: center;
-  padding: ${({ $open }) => ($open ? '20px 30px' : '0')};
-  height: ${({ $open }) => ($open ? 'auto' : '0')};
+
+  padding: ${({ $open, theme }) =>
+    $open ? `${theme.spacing.lg} ${theme.spacing.xl}` : 0};
+
+  height: ${({ $open }) => ($open ? 'auto' : 0)};
   overflow: hidden;
   transition: all 0.4s ease;
-  z-index: 1000;
+
+  z-index: ${({ theme }) => theme.zIndex.modal};
 
   a {
-    display: block;
-    color: #fffdfa;
-    font-family: 'Roboto';
-    font-size: 22px;
+    color: ${({ theme }) => theme.colors.textWhite};
+    font-family: ${({ theme }) => theme.font.secondary};
+    font-size: ${({ theme }) => theme.fontSize.lg};
     text-decoration: none;
-    transition: color 0.3s ease;
 
     &:hover {
-      color: #e0a449;
+      color: ${({ theme }) => theme.colors.accent};
     }
   }
 `;
+
 export const SocialIcons = styled.div`
   display: flex;
-  gap: 20px;
-  margin-top: 5px;
+  gap: ${({ theme }) => theme.spacing.lg};
+  margin-top: ${({ theme }) => theme.spacing.xs};
   justify-content: center;
 `;
 
 export const SocialLink = styled.a`
   svg {
-    width: 24px;
-    height: 24px;
+    width: ${({ theme }) => theme.spacing.xl};
+    height: ${({ theme }) => theme.spacing.xl};
     transition:
       transform 0.2s ease,
       opacity 0.2s ease;
   }
+
   &:hover svg {
-    fill: rgba(224, 164, 73, 1);
+    fill: ${({ theme }) => theme.colors.accent};
   }
 `;

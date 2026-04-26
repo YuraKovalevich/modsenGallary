@@ -1,4 +1,7 @@
 import React from 'react';
+
+import FavoutitesLogo from '../../assets/FavoutitesLogo';
+import { useFavorites } from '../../hooks/useFavorites';
 import {
   FavoriteIconWrapper,
   ImageCard,
@@ -6,8 +9,6 @@ import {
   ImageTitle,
   StyledImage,
 } from '../../pages/Images.styled';
-import FavoutitesLogo from '../../assets/FavoutitesLogo';
-import { useFavorites } from '../../hooks/useFavorites';
 import type { UnsplashImage } from '../../services/unsplashApi';
 
 interface Props {

@@ -1,7 +1,8 @@
 import React from 'react';
-import ImageCard from './ImageCard';
-import type { UnsplashImage } from '../../services/unsplashApi';
+
 import { ImageGrid } from '../../pages/Images.styled';
+import type { UnsplashImage } from '../../services/unsplashApi';
+import ImageCard from './ImageCard';
 
 interface Props {
   images: UnsplashImage[];

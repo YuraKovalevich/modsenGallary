@@ -1,22 +1,22 @@
+import Facebook from '../../assets/Facebook';
+import Github from '../../assets/Github';
+import Inst from '../../assets/Inst';
 import Logo from '../../assets/Logo';
 import Twitter from '../../assets/Twitter';
-import Facebook from '../../assets/Facebook';
-import Inst from '../../assets/Inst';
-import Github from '../../assets/Github';
 import {
-  FooterWrapper,
   FooterContainer,
   FooterContent,
   FooterGallery,
-  GalleryText,
-  GalleryShare,
   FooterRights,
+  FooterWrapper,
+  GalleryShare,
+  GalleryText,
+  LinksList,
   Section,
   SectionTitle,
-  LinksList,
-  StyledLink,
-  SocialLink,
   SectionWrapper,
+  SocialLink,
+  StyledLink,
 } from './Footer.styled';
 
 const Footer = () => {

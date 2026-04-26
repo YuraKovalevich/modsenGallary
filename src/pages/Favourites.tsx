@@ -1,14 +1,15 @@
 import React from 'react';
-import { GalleryWrapper, ImageGrid } from './Images.styled';
-import {
-  FavouritesContainer,
-  EmptyState,
-  EmptyStateTitle,
-  FavouritesText,
-} from './Favourites.styled';
+
 import ImageCardComponent from '../components/layout/ImageCard';
 import { useFavorites } from '../hooks/useFavorites';
 import type { UnsplashImage } from '../services/unsplashApi';
+import {
+  EmptyState,
+  EmptyStateTitle,
+  FavouritesContainer,
+  FavouritesText,
+} from './Favourites.styled';
+import { GalleryWrapper, ImageGrid } from './Images.styled';
 
 const Favourites: React.FC = () => {
   const { favorites } = useFavorites();

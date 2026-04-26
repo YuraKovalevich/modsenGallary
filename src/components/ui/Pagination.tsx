@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { ArrowButton, PageButton, Pagination } from '../../pages/Images.styled';
 
 interface Props {

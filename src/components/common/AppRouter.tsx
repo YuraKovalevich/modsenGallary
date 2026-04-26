@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { routes } from '../../routes';
+
 import {
   GALLERY_ROUTE,
   IMAGES_ROUTE,
   NOTFOUND_ROUTE,
 } from '../../constants/linkRoutes';
-import FindImages from '../layout/FindImages';
 import Gallary from '../../pages/Gallary';
 import Images from '../../pages/Images';
+import { routes } from '../../routes';
+import FindImages from '../layout/FindImages';
 
 const AppRouter = () => {
   const [searchQuery, setSearchQuery] = useState('');
