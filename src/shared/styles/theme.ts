@@ -1,4 +1,4 @@
-export const theme = {
+const baseTheme = {
   colors: {
     overlayDark: 'rgba(0, 0, 0, 0.7)',
     overlayMedium: 'rgba(0, 0, 0, 0.4)',
@@ -16,6 +16,13 @@ export const theme = {
     border: '#DDD',
     bgLight: '#F0F1F1',
     bgDark: '#343333',
+    bgError: '#2a2a2a',
+    error: '#ff6b6b',
+    headerFooterBg: 'transparent',
+    headerFooterBorder: 'transparent',
+    heroTitle: '#FFFFFF',
+    backgroundGradient:
+      'linear-gradient(90deg, #343333 38.05%, #484848 69.22%, #282828 98.98%)',
   },
   font: {
     main: "'Lexend Deca', sans-serif",
@@ -36,6 +43,8 @@ export const theme = {
     titleXl: '96px',
     categoryMd: '20px',
     categoryLg: '22px',
+    giant: '120px',
+    huge: '72px',
   },
   spacing: {
     xs: '4px',
@@ -56,6 +65,7 @@ export const theme = {
   zIndex: { modal: 10000, modalContent: 10001, closeButton: 10002 },
   layout: {
     containerMaxWidth: '1310px',
+    heroMaxWidth: '1200px',
     modalWidth: '735px',
     modalSideArrowOffset: '50px',
     categoryCardMaxWidth: '400px',
@@ -69,6 +79,93 @@ export const theme = {
     arrowOffset: '50px',
     arrowOffsetSm: '20px',
   },
-  components: { iconButton: '40px', closeButton: '32px', sideArrow: '40px' },
+  components: {
+    iconButton: '40px',
+    iconButtonSize: '40px',
+    borderSize: '3px',
+    closeButton: '32px',
+    sideArrow: '40px',
+  },
+  loader: {
+    speed: '1s',
+    duration: '1s',
+  },
   breakpoints: { sm: '480px', md: '768px', lg: '1080px', xl: '1310px' },
 };
+
+export const themes = {
+  dark: baseTheme,
+  light: {
+    ...baseTheme,
+    colors: {
+      ...baseTheme.colors,
+      textWhite: '#111111',
+      textPrimary: '#1f2937',
+      textSecondary: '#4b5563',
+      textLight: '#6b7280',
+      white: '#ffffff',
+      bgLight: '#ffffff',
+      bgDark: '#f3f4f6',
+      border: '#d1d5db',
+      headerFooterBg: 'rgba(31, 41, 55, 0.9)',
+      headerFooterBorder: 'rgba(148, 163, 184, 0.55)',
+      heroTitle: '#f8fafc',
+      backgroundGradient:
+        'linear-gradient(90deg, #f8fafc 0%, #eef2ff 50%, #f1f5f9 100%)',
+    },
+  },
+  colorfulViolet: {
+    ...baseTheme,
+    colors: {
+      ...baseTheme.colors,
+      primary: '#7C3AED',
+      primaryHover: 'rgba(124, 58, 237, 0.85)',
+      accent: '#06B6D4',
+      bgLight: '#fdf4ff',
+      bgDark: '#1f1147',
+      backgroundGradient:
+        'linear-gradient(90deg, #1f1147 0%, #3b0764 52%, #0f172a 100%)',
+    },
+  },
+  colorfulOcean: {
+    ...baseTheme,
+    colors: {
+      ...baseTheme.colors,
+      primary: '#0EA5E9',
+      primaryHover: 'rgba(14, 165, 233, 0.85)',
+      accent: '#22D3EE',
+      bgLight: '#ecfeff',
+      bgDark: '#082f49',
+      backgroundGradient:
+        'linear-gradient(90deg, #082f49 0%, #0c4a6e 52%, #083344 100%)',
+    },
+  },
+  colorfulSunset: {
+    ...baseTheme,
+    colors: {
+      ...baseTheme.colors,
+      primary: '#F97316',
+      primaryHover: 'rgba(249, 115, 22, 0.85)',
+      accent: '#FB7185',
+      bgLight: '#fff7ed',
+      bgDark: '#431407',
+      backgroundGradient:
+        'linear-gradient(90deg, #431407 0%, #7c2d12 48%, #881337 100%)',
+    },
+  },
+  colorfulForest: {
+    ...baseTheme,
+    colors: {
+      ...baseTheme.colors,
+      primary: '#16A34A',
+      primaryHover: 'rgba(22, 163, 74, 0.85)',
+      accent: '#84CC16',
+      bgLight: '#f7fee7',
+      bgDark: '#052e16',
+      backgroundGradient:
+        'linear-gradient(90deg, #052e16 0%, #14532d 52%, #365314 100%)',
+    },
+  },
+};
+
+export const theme = themes.dark;

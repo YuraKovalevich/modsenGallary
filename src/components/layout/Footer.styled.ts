@@ -2,13 +2,16 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const FooterWrapper = styled.div`
-  max-width: ${({ theme }) => theme.layout.containerMaxWidth};
-  margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.sm};
+  width: 100%;
+  background: ${({ theme }) => theme.colors.headerFooterBg};
+  border-top: 1px solid ${({ theme }) => theme.colors.headerFooterBorder};
 `;
 
 export const FooterContainer = styled.div`
-  padding: ${({ theme }) => theme.spacing.xxl} 0;
+  max-width: ${({ theme }) => theme.layout.containerMaxWidth};
+  margin: 0 auto;
+  padding: ${({ theme }) => theme.spacing.xxl}
+    ${({ theme }) => theme.spacing.md};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     display: flex;

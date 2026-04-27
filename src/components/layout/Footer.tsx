@@ -3,96 +3,84 @@ import Github from '../../assets/Github';
 import Inst from '../../assets/Inst';
 import Logo from '../../assets/Logo';
 import Twitter from '../../assets/Twitter';
-import {
-  FooterContainer,
-  FooterContent,
-  FooterGallery,
-  FooterRights,
-  FooterWrapper,
-  GalleryShare,
-  GalleryText,
-  LinksList,
-  Section,
-  SectionTitle,
-  SectionWrapper,
-  SocialLink,
-  StyledLink,
-} from './Footer.styled';
+import * as S from './Footer.styled';
+
+const socialLinks = [
+  { key: 'twitter', Icon: Twitter },
+  { key: 'facebook', Icon: Facebook },
+  { key: 'instagram', Icon: Inst },
+  { key: 'github', Icon: Github },
+];
+
+const footerSections = [
+  {
+    title: 'COMPANY',
+    links: ['About', 'Features', 'Works', 'Career'],
+  },
+  {
+    title: 'HELP',
+    links: [
+      'Customer Support',
+      'Delivery Details',
+      'Terms & Conditions',
+      'Privacy Policy',
+    ],
+  },
+  {
+    title: 'FAQ',
+    links: ['Account', 'Manage Deliveries', 'Orders', 'Payments'],
+  },
+  {
+    title: 'RESOURCES',
+    links: [
+      'Free eBooks',
+      'Development Tutorial',
+      'How to - Blog',
+      'Youtube Playlist',
+    ],
+  },
+];
 
 const Footer = () => {
   return (
-    <FooterWrapper>
-      <FooterContainer>
-        <FooterContent>
-          <FooterGallery>
+    <S.FooterWrapper>
+      <S.FooterContainer>
+        <S.FooterContent>
+          <S.FooterGallery>
             <Logo />
-            <GalleryText>
+            <S.GalleryText>
               We have images that capture every mood and inspire every vision.
               From breathtaking landscapes to vibrant portraits.
-            </GalleryText>
-            <GalleryShare>
-              <SocialLink to={'/'}>
-                <Twitter />
-              </SocialLink>
-              <SocialLink to={'/'}>
-                <Facebook />
-              </SocialLink>
-              <SocialLink to={'/'}>
-                <Inst />
-              </SocialLink>
-              <SocialLink to={'/'}>
-                <Github />
-              </SocialLink>
-            </GalleryShare>
-          </FooterGallery>
-          <SectionWrapper>
-            <Section>
-              <SectionTitle>COMPANY</SectionTitle>
-              <LinksList>
-                <StyledLink to="/">About</StyledLink>
-                <StyledLink to="/">Features</StyledLink>
-                <StyledLink to="/">Works</StyledLink>
-                <StyledLink to="/">Career</StyledLink>
-              </LinksList>
-            </Section>
+            </S.GalleryText>
+            <S.GalleryShare>
+              {socialLinks.map(({ key, Icon }) => (
+                <S.SocialLink key={key} to="/">
+                  <Icon />
+                </S.SocialLink>
+              ))}
+            </S.GalleryShare>
+          </S.FooterGallery>
+          <S.SectionWrapper>
+            {footerSections.map(({ title, links }) => (
+              <S.Section key={title}>
+                <S.SectionTitle>{title}</S.SectionTitle>
+                <S.LinksList>
+                  {links.map((label) => (
+                    <S.StyledLink key={label} to="/">
+                      {label}
+                    </S.StyledLink>
+                  ))}
+                </S.LinksList>
+              </S.Section>
+            ))}
+          </S.SectionWrapper>
+        </S.FooterContent>
 
-            <Section>
-              <SectionTitle>HELP</SectionTitle>
-              <LinksList>
-                <StyledLink to="/">Customer Support</StyledLink>
-                <StyledLink to="/">Delivery Details</StyledLink>
-                <StyledLink to="/">Terms & Conditions</StyledLink>
-                <StyledLink to="/">Privacy Policy</StyledLink>
-              </LinksList>
-            </Section>
-
-            <Section>
-              <SectionTitle>FAQ</SectionTitle>
-              <LinksList>
-                <StyledLink to="/">Account</StyledLink>
-                <StyledLink to="/">Manage Deliveries</StyledLink>
-                <StyledLink to="/">Orders</StyledLink>
-                <StyledLink to="/">Payments</StyledLink>
-              </LinksList>
-            </Section>
-
-            <Section>
-              <SectionTitle>RESOURCES</SectionTitle>
-              <LinksList>
-                <StyledLink to="/">Free eBooks</StyledLink>
-                <StyledLink to="/">Development Tutorial</StyledLink>
-                <StyledLink to="/">How to - Blog</StyledLink>
-                <StyledLink to="/">Youtube Playlist</StyledLink>
-              </LinksList>
-            </Section>
-          </SectionWrapper>
-        </FooterContent>
-
-        <FooterRights>
+        <S.FooterRights>
           Modsen.gallery © 2000-2025, All Rights Reserved
-        </FooterRights>
-      </FooterContainer>
-    </FooterWrapper>
+        </S.FooterRights>
+      </S.FooterContainer>
+    </S.FooterWrapper>
   );
 };
 

@@ -4,11 +4,11 @@ import {
   GALLERY_ROUTE,
   IMAGES_ROUTE,
   NOTFOUND_ROUTE,
-} from './constants/linkRoutes';
-import Favourites from './pages/Favourites';
-import Gallary from './pages/Gallary';
-import Images from './pages/Images';
-import NotFound from './pages/NotFound';
+} from '@constants/linkRoutes';
+import Favourites from '@pages/Favourites';
+import Gallary from '@pages/Gallary';
+import Images from '@pages/Images';
+import NotFound from '@pages/NotFound';
 
 export const routes = [
   {

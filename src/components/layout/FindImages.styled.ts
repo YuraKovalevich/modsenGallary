@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 
+import findImage from '../../assets/find.jpg';
+
 export const Wrapper = styled.div`
   position: relative;
   width: 100%;
   height: 500px;
-  overflow: hidden;
+  overflow: visible;
+  background: url(${findImage}) center / cover no-repeat;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     height: 400px;
@@ -13,12 +16,6 @@ export const Wrapper = styled.div`
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     height: 300px;
   }
-`;
-
-export const BackgroundImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 `;
 
 export const Container = styled.div`
@@ -39,6 +36,7 @@ export const Title = styled.h1`
   font-size: ${({ theme }) => theme.fontSize.titleXl};
   margin: 0 auto ${({ theme }) => theme.spacing.xl};
   line-height: 1.2;
+  color: ${({ theme }) => theme.colors.heroTitle};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     font-size: ${({ theme }) => theme.fontSize.titleLg};
@@ -81,11 +79,26 @@ export const SearchContainer = styled.form`
   }
 `;
 
-export const SearchIcon = styled.img`
+export const SearchIcon = styled.span`
   width: 20px;
   height: 20px;
+  display: inline-block;
   margin-right: ${({ theme }) => theme.spacing.sm};
   opacity: 0.6;
+  border: 2px solid ${({ theme }) => theme.colors.textSecondary};
+  border-radius: 50%;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 2px;
+    background: ${({ theme }) => theme.colors.textSecondary};
+    transform: rotate(45deg);
+    right: -5px;
+    bottom: 1px;
+  }
 `;
 
 export const SearchInput = styled.input`
@@ -102,6 +115,42 @@ export const SearchInput = styled.input`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: ${({ theme }) => theme.fontSize.sm};
+  }
+`;
+
+export const SearchWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  z-index: 10;
+`;
+
+export const SuggestionsList = styled.ul`
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  max-height: 280px;
+  overflow-y: auto;
+  list-style: none;
+  border-radius: ${({ theme }) => theme.radius.md};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.white};
+  box-shadow: ${({ theme }) => theme.shadow.sm};
+  text-align: left;
+  overflow: hidden;
+  z-index: 5;
+`;
+
+export const SuggestionItem = styled.li`
+  color: ${({ theme }) => theme.colors.textPrimary};
+  font-family: ${({ theme }) => theme.font.secondary};
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.bgLight};
   }
 `;
 

@@ -11,12 +11,7 @@ export const GlobalStyles = createGlobalStyle`
 
   body {
     font-family: ${({ theme }) => theme.font.secondary};
-    background: linear-gradient(
-      90deg,
-      #343333 38.05%,
-      #484848 69.22%,
-      #282828 98.98%
-    );
+    background: ${({ theme }) => theme.colors.backgroundGradient};
   }
 
   a {

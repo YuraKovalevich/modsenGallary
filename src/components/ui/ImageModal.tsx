@@ -1,12 +1,12 @@
+import { FavoriteButton } from '@pages/Images.styled.ts';
+import type { UnsplashImage } from '@services/unsplashApi.ts';
 import { useEffect } from 'react';
 
+import BtnLeft from '../../assets/BtnLeft';
+import BtnRight from '../../assets/BtnRight';
+import CloseBtn from '../../assets/CloseBtn';
 import FavoutitesLogo from '../../assets/FavoutitesLogo';
-import { useFavorites } from '../../hooks/useFavorites';
-import { FavoriteButton } from '../../pages/Images.styled';
-import type { UnsplashImage } from '../../services/unsplashApi';
-import BtnLeft from './BtnLeft';
-import BtnRight from './BtnRight';
-import CloseBtn from './CloseBtn';
+import { useFavoritesContext } from '../common/useFavoritesContext';
 import {
   ArrowButton,
   ArrowsContainer,
@@ -37,7 +37,7 @@ const ImageModal: React.FC<Props> = ({
   onNext,
   onBlurToggle,
 }) => {
-  const { toggleFavorite, isFavorite } = useFavorites();
+  const { toggleFavorite, isFavorite } = useFavoritesContext();
   const currentImage = images[currentIndex];
   const favorite = isFavorite(currentImage.id);
 
@@ -62,15 +62,27 @@ const ImageModal: React.FC<Props> = ({
       onBlurToggle(false);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentIndex]);
+  }, [currentIndex, onBlurToggle, onClose, onNext, onPrev]);
+
+  const handleOverlayClick = () => {
+    onClose();
+  };
+
+  const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
+  const handleFavoriteClick = () => {
+    toggleFavorite(currentImage);
+  };
 
   return (
-    <Overlay onClick={onClose}>
-      <ModalContent onClick={(e) => e.stopPropagation()}>
+    <Overlay onClick={handleOverlayClick}>
+      <ModalContent onClick={handleContentClick}>
         <ImageContainer>
           <ModalImage
             src={currentImage.urls.full}
-            alt={currentImage.alt_description || 'Image'}
+            alt={currentImage.altDescription || 'Image'}
           />
 
           <CloseButton onClick={onClose}>
@@ -88,13 +100,10 @@ const ImageModal: React.FC<Props> = ({
 
         <ModalDescription>
           <ModalText>
-            {truncateText(currentImage.alt_description || '', 40)}
+            {truncateText(currentImage.altDescription || '', 40)}
           </ModalText>
 
-          <FavoriteButton
-            $isFavorite={favorite}
-            onClick={() => toggleFavorite(currentImage)}
-          >
+          <FavoriteButton $isFavorite={favorite} onClick={handleFavoriteClick}>
             <FavoutitesLogo />
           </FavoriteButton>
         </ModalDescription>

@@ -2,15 +2,18 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const HeaderWrapper = styled.header`
-  max-width: ${({ theme }) => theme.layout.containerMaxWidth};
-  margin: 0 auto;
-  height: ${({ theme }) => theme.spacing.xxxl};
-  display: grid;
-  align-items: center;
+  width: 100%;
+  min-height: ${({ theme }) => theme.spacing.xxxl};
+  background: ${({ theme }) => theme.colors.headerFooterBg};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.headerFooterBorder};
   position: relative;
 `;
 
 export const HeaderContainer = styled.div`
+  max-width: ${({ theme }) => theme.layout.containerMaxWidth};
+  margin: 0 auto;
+  min-height: ${({ theme }) => theme.spacing.xxxl};
+  padding: 0 ${({ theme }) => theme.spacing.md};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -87,7 +90,7 @@ export const IconWrapper = styled.div`
   }
 `;
 
-export const BurgerButton = styled.div`
+export const BurgerButton = styled.div<{ $open?: boolean }>`
   width: ${({ theme }) => theme.spacing.xl};
   height: ${({ theme }) => theme.spacing.lg};
   display: none;

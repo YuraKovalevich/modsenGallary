@@ -1,60 +1,39 @@
-import { useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-
 import {
   GALLERY_ROUTE,
   IMAGES_ROUTE,
   NOTFOUND_ROUTE,
-} from '../../constants/linkRoutes';
-import Gallary from '../../pages/Gallary';
-import Images from '../../pages/Images';
-import { routes } from '../../routes';
+} from '@constants/linkRoutes.ts';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
+
+import { routes } from '@/routes.ts';
+
+import Gallary from '../../pages/Gallary/index';
+import Images from '../../pages/Images/index';
 import FindImages from '../layout/FindImages';
 
+const galleryAndImagesRoutes = new Set<string>([GALLERY_ROUTE, IMAGES_ROUTE]);
+const fallbackRoutes = routes.filter(
+  (route) => !galleryAndImagesRoutes.has(route.path)
+);
+
+const GalleryImagesLayout = () => (
+  <>
+    <FindImages />
+    <Outlet />
+  </>
+);
+
 const AppRouter = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearchChange = (query: string) => {
-    setSearchQuery(query);
-  };
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
-
   return (
     <Routes>
-      <Route
-        path={GALLERY_ROUTE}
-        element={
-          <>
-            <FindImages />
-            <Gallary />
-          </>
-        }
-      />
+      <Route element={<GalleryImagesLayout />}>
+        <Route path={GALLERY_ROUTE} element={<Gallary />} />
+        <Route path={IMAGES_ROUTE} element={<Images />} />
+      </Route>
 
-      <Route
-        path={IMAGES_ROUTE}
-        element={
-          <>
-            <FindImages
-              searchQuery={searchQuery}
-              onSearchChange={handleSearchChange}
-              onSearch={handleSearch}
-            />
-            <Images searchQuery={searchQuery} />
-          </>
-        }
-      />
-
-      {routes
-        .filter(
-          (route) => route.path !== GALLERY_ROUTE && route.path !== IMAGES_ROUTE
-        )
-        .map(({ path, Component }) => (
-          <Route key={path} path={path} Component={Component} />
-        ))}
+      {fallbackRoutes.map(({ path, Component }) => (
+        <Route key={path} path={path} Component={Component} />
+      ))}
 
       <Route
         path="*"

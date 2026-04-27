@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { ArrowButton, PageButton, Pagination } from '../../pages/Images.styled';
+import { ArrowButton, PageButton, Pagination } from '@pages/Images.styled.ts';
 
 interface Props {
   currentPage: number;
@@ -15,6 +13,17 @@ const PaginationComponent: React.FC<Props> = ({
 }) => {
   if (totalPages <= 1) return null;
 
+  const handlePageButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    const page = Number(event.currentTarget.dataset.page ?? 1);
+    onPageChange(page);
+  };
+
+  const handleNextPageClick = () => {
+    onPageChange(currentPage + 1);
+  };
+
   return (
     <Pagination>
       {[...Array(totalPages)].map((_, idx) => {
@@ -22,8 +31,9 @@ const PaginationComponent: React.FC<Props> = ({
         return (
           <PageButton
             key={page}
+            data-page={page}
             $active={currentPage === page}
-            onClick={() => onPageChange(page)}
+            onClick={handlePageButtonClick}
           >
             {page}
           </PageButton>
@@ -31,7 +41,7 @@ const PaginationComponent: React.FC<Props> = ({
       })}
       <ArrowButton
         disabled={currentPage === totalPages}
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={handleNextPageClick}
       />
     </Pagination>
   );

@@ -1,6 +1,5 @@
-import React, { createContext, useEffect, useState } from 'react';
-
-import type { UnsplashImage } from '../../services/unsplashApi';
+import type { UnsplashImage } from '@services/unsplashApi.ts';
+import { createContext, useEffect, useState } from 'react';
 
 interface FavoritesContextType {
   favorites: UnsplashImage[];
@@ -28,23 +27,26 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const addToFavorites = (image: UnsplashImage) => {
     setFavorites((prev) =>
-      prev.find((f) => f.id === image.id) ? prev : [...prev, image]
-    );
-  };
-
-  const removeFromFavorites = (id: string) => {
-    setFavorites((prev) => prev.filter((f) => f.id !== id));
-  };
-
-  const toggleFavorite = (image: UnsplashImage) => {
-    setFavorites((prev) =>
-      prev.find((f) => f.id === image.id)
-        ? prev.filter((f) => f.id !== image.id)
+      prev.find((favorite) => favorite.id === image.id)
+        ? prev
         : [...prev, image]
     );
   };
 
-  const isFavorite = (id: string) => favorites.some((f) => f.id === id);
+  const removeFromFavorites = (id: string) => {
+    setFavorites((prev) => prev.filter((favorite) => favorite.id !== id));
+  };
+
+  const toggleFavorite = (image: UnsplashImage) => {
+    setFavorites((prev) =>
+      prev.find((favorite) => favorite.id === image.id)
+        ? prev.filter((favorite) => favorite.id !== image.id)
+        : [...prev, image]
+    );
+  };
+
+  const isFavorite = (id: string) =>
+    favorites.some((favorite) => favorite.id === id);
 
   return (
     <FavoritesContext.Provider

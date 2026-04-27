@@ -1,7 +1,6 @@
-import React from 'react';
+import { ImageGrid } from '@pages/Images.styled.ts';
+import type { UnsplashImage } from '@services/unsplashApi.ts';
 
-import { ImageGrid } from '../../pages/Images.styled';
-import type { UnsplashImage } from '../../services/unsplashApi';
 import ImageCard from './ImageCard';
 
 interface Props {
@@ -9,16 +8,25 @@ interface Props {
   onImageClick?: (index: number) => void;
 }
 
-const ImageGridComponent: React.FC<Props> = ({ images, onImageClick }) => (
-  <ImageGrid>
-    {images.map((img, index) => (
-      <ImageCard
-        key={img.id}
-        image={img}
-        onClick={() => onImageClick?.(index)}
-      />
-    ))}
-  </ImageGrid>
-);
+const ImageGridComponent: React.FC<Props> = ({ images, onImageClick }) => {
+  const handleImageClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const index = Number(event.currentTarget.dataset.index ?? -1);
+    if (index < 0) return;
+    onImageClick?.(index);
+  };
+
+  return (
+    <ImageGrid>
+      {images.map((img, index) => (
+        <ImageCard
+          key={img.id}
+          image={img}
+          cardIndex={index}
+          onClick={handleImageClick}
+        />
+      ))}
+    </ImageGrid>
+  );
+};
 
 export default ImageGridComponent;

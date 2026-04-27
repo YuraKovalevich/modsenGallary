@@ -1,41 +1,43 @@
-import React from 'react';
-
-import FavoutitesLogo from '../../assets/FavoutitesLogo';
-import { useFavorites } from '../../hooks/useFavorites';
 import {
   FavoriteIconWrapper,
   ImageCard,
   ImageInfo,
   ImageTitle,
   StyledImage,
-} from '../../pages/Images.styled';
-import type { UnsplashImage } from '../../services/unsplashApi';
+} from '@pages/Images.styled.ts';
+import type { UnsplashImage } from '@services/unsplashApi.ts';
+
+import FavoutitesLogo from '../../assets/FavoutitesLogo';
+import { useFavoritesContext } from '../common/useFavoritesContext';
 
 interface Props {
   image: UnsplashImage;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  cardIndex?: number;
 }
 
-const ImageCardComponent: React.FC<Props> = ({ image, onClick }) => {
-  const { toggleFavorite, isFavorite } = useFavorites();
+const ImageCardComponent: React.FC<Props> = ({ image, onClick, cardIndex }) => {
+  const { toggleFavorite, isFavorite } = useFavoritesContext();
   const favorite = isFavorite(image.id);
 
+  const handleFavoriteClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    toggleFavorite(image);
+  };
+
   return (
-    <ImageCard onClick={onClick}>
+    <ImageCard onClick={onClick} data-index={cardIndex}>
       <StyledImage
         src={image.urls.regular}
-        alt={image.alt_description || 'Image'}
+        alt={image.altDescription || 'Image'}
       />
       <ImageInfo>
         <ImageTitle>
-          {image.description || image.alt_description || 'Beautiful image'}
+          {image.description || image.altDescription || 'Beautiful image'}
         </ImageTitle>
         <FavoriteIconWrapper
           $isFavorite={favorite}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleFavorite(image);
-          }}
+          onClick={handleFavoriteClick}
         >
           <FavoutitesLogo />
         </FavoriteIconWrapper>

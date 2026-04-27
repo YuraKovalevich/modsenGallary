@@ -1,3 +1,9 @@
+import {
+  CATEGORY_ROUTE,
+  FAVOURITES_ROUTE,
+  GALLERY_ROUTE,
+  IMAGES_ROUTE,
+} from '@constants/linkRoutes.ts';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -9,12 +15,7 @@ import Images from '../../assets/ImagesLogo';
 import Inst from '../../assets/Inst';
 import Logo from '../../assets/Logo';
 import Twitter from '../../assets/Twitter';
-import {
-  CATEGORY_ROUTE,
-  FAVOURITES_ROUTE,
-  GALLERY_ROUTE,
-  IMAGES_ROUTE,
-} from '../../constants/linkRoutes';
+import ThemeSwitcher from '../ui/ThemeSwitcher';
 import {
   BurgerButton,
   BurgerLine,
@@ -30,6 +31,12 @@ import {
   SocialLink,
   StyledLink,
 } from './Header.styled';
+
+const menuItems = [
+  { label: 'Category', path: CATEGORY_ROUTE, Icon: Category },
+  { label: 'Images', path: IMAGES_ROUTE, Icon: Images },
+  { label: 'Favourites', path: FAVOURITES_ROUTE, Icon: Favourites },
+];
 
 const Header = () => {
   const location = useLocation();
@@ -53,56 +60,31 @@ const Header = () => {
 
         <NavbarMenu>
           <MenuList>
-            <MenuItem $isActive={location.pathname === CATEGORY_ROUTE}>
-              <Link to={CATEGORY_ROUTE} className="menu-link">
-                <IconWrapper>
-                  <Category />
-                </IconWrapper>
-                <MenuLink $isActive={location.pathname === CATEGORY_ROUTE}>
-                  Category
-                </MenuLink>
-              </Link>
-            </MenuItem>
-            <MenuItem $isActive={location.pathname === IMAGES_ROUTE}>
-              <Link to={IMAGES_ROUTE} className="menu-link">
-                <IconWrapper>
-                  <Images />
-                </IconWrapper>
-                <MenuLink $isActive={location.pathname === IMAGES_ROUTE}>
-                  Images
-                </MenuLink>
-              </Link>
-            </MenuItem>
-            <MenuItem $isActive={location.pathname === FAVOURITES_ROUTE}>
-              <Link to={FAVOURITES_ROUTE} className="menu-link">
-                <IconWrapper>
-                  <Favourites />
-                </IconWrapper>
-                <MenuLink $isActive={location.pathname === FAVOURITES_ROUTE}>
-                  Favourites
-                </MenuLink>
-              </Link>
-            </MenuItem>
+            {menuItems.map(({ label, path, Icon }) => (
+              <MenuItem key={path} $isActive={location.pathname === path}>
+                <Link to={path} className="menu-link">
+                  <IconWrapper>
+                    <Icon />
+                  </IconWrapper>
+                  <MenuLink $isActive={location.pathname === path}>
+                    {label}
+                  </MenuLink>
+                </Link>
+              </MenuItem>
+            ))}
           </MenuList>
         </NavbarMenu>
+        <ThemeSwitcher />
       </HeaderContainer>
 
       <MobileMenu $open={menuOpen}>
-        <MenuItem onClick={closeMenu}>
-          <Link to={CATEGORY_ROUTE} className="menu-link">
-            <span>Category</span>
-          </Link>
-        </MenuItem>
-        <MenuItem onClick={closeMenu}>
-          <Link to={IMAGES_ROUTE} className="menu-link">
-            <span>Images</span>
-          </Link>
-        </MenuItem>
-        <MenuItem onClick={closeMenu}>
-          <Link to={FAVOURITES_ROUTE} className="menu-link">
-            <span>Favourites</span>
-          </Link>
-        </MenuItem>
+        {menuItems.map(({ label, path }) => (
+          <MenuItem key={path} onClick={closeMenu}>
+            <Link to={path} className="menu-link">
+              <span>{label}</span>
+            </Link>
+          </MenuItem>
+        ))}
 
         <SocialIcons>
           <SocialLink href="#">
