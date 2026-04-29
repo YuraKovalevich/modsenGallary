@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import Loader from '@/components/ui/Loader';
 import {
   getCategoryImage,
   type UnsplashCategoryImage,
-} from '../services/unsplashApi';
+} from '@/services/unsplashApi';
+
+import { GalleryWrapper } from '../Images/styles';
 import {
-  GalleryContainer,
-  LoadingText,
-  CategoryGrid,
   CategoryCard,
+  CategoryGrid,
   CategoryImage,
   CategoryName,
-} from './Gallary.styled';
-import { GalleryWrapper } from './Images.styled';
+  GalleryContainer,
+} from './styles';
 
 const categories = [
   'Art',
@@ -29,13 +31,13 @@ const categories = [
   'Sky',
 ];
 
-interface Category {
+interface CategoryItem {
   name: string;
   image: UnsplashCategoryImage | null;
 }
 
-const Gallary = () => {
-  const [items, setItems] = useState<Category[]>([]);
+const Gallery = () => {
+  const [items, setItems] = useState<CategoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -47,27 +49,39 @@ const Gallary = () => {
           image: await getCategoryImage(name),
         }))
       );
+
       setItems(results);
       setLoading(false);
     };
+
     loadImages();
   }, []);
 
-  const handleCategoryClick = (name: string) => {
-    navigate(`/images?q=${encodeURIComponent(name)}`, {
-      state: { searchQuery: '' },
+  const handleCategoryClick = (categoryName: string) => {
+    navigate(`/images?search=${encodeURIComponent(categoryName)}`, {
+      state: { searchQuery: categoryName },
     });
   };
 
-  if (loading) return <LoadingText>Загрузка категорий...</LoadingText>;
+  const handleCategoryCardClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const categoryName = event.currentTarget.dataset.categoryName;
+    if (!categoryName) return;
+    handleCategoryClick(categoryName);
+  };
+
+  if (loading) return <Loader />;
 
   return (
     <GalleryWrapper>
       <GalleryContainer>
         <CategoryGrid>
           {items.map(({ name, image }) => (
-            <CategoryCard key={name} onClick={() => handleCategoryClick(name)}>
-              {image ? (
+            <CategoryCard
+              key={name}
+              data-category-name={name}
+              onClick={handleCategoryCardClick}
+            >
+              {image?.urls?.regular ? (
                 <CategoryImage src={image.urls.regular} alt={name} />
               ) : (
                 'error'
@@ -81,4 +95,4 @@ const Gallary = () => {
   );
 };
 
-export default Gallary;
+export default Gallery;

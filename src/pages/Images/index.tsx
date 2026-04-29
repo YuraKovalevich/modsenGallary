@@ -1,34 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { GalleryWrapper, GalleryContainer, LoadingText } from './Images.styled';
+
+import { NoResultsText } from '@/components/layout/FindImages.styled';
+import ImageGrid from '@/components/layout/ImageGrid';
+import ImageModal from '@/components/ui/ImageModal';
+import Loader from '@/components/ui/Loader';
+import Pagination from '@/components/ui/Pagination';
+import SortDropdown from '@/components/ui/SortDropdown';
+import { SORT_OPTIONS, type SortOption } from '@/constants/sort';
 import {
   getRandomImages,
   searchImages,
   type UnsplashImage,
-} from '../services/unsplashApi';
-import { NoResultsText } from '../components/layout/FindImages.styled';
-import ImageGrid from '../components/layout/ImageGrid';
-import SortDropdown from '../components/common/SortDropdown';
-import Pagination from '../components/ui/Pagination';
-import ImageModal from '../components/ui/ImageModal';
+} from '@/services/unsplashApi';
 
-interface Props {
-  searchQuery?: string;
-}
+import { GalleryContainer, GalleryWrapper } from './styles';
 
-const Images: React.FC<Props> = ({ searchQuery = '' }) => {
+const Images = () => {
   const location = useLocation();
   const stateSearchQuery = location.state?.searchQuery || '';
   const [searchParams] = useSearchParams();
-  const categoryQuery = searchParams.get('q')?.trim() || '';
-  const query = categoryQuery || searchQuery || stateSearchQuery;
+  const searchParam = searchParams.get('search')?.trim() || '';
+  const query = searchParam || stateSearchQuery;
 
   const [images, setImages] = useState<UnsplashImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [sortBy, setSortBy] = useState<'relevant' | 'latest'>('relevant');
-
+  const [sortBy, setSortBy] = useState<SortOption>(SORT_OPTIONS.relevant);
   const [modalIndex, setModalIndex] = useState<number | null>(null);
   const [blur, setBlur] = useState(false);
 
@@ -39,7 +38,7 @@ const Images: React.FC<Props> = ({ searchQuery = '' }) => {
         if (query) {
           const result = await searchImages(query, currentPage, 12, sortBy);
           setImages(result.results);
-          setTotalPages(Math.min(result.total_pages, 4));
+          setTotalPages(Math.min(result.totalPages, 4));
         } else {
           const data = await getRandomImages(currentPage, 12);
           setImages(data);
@@ -52,32 +51,47 @@ const Images: React.FC<Props> = ({ searchQuery = '' }) => {
         setLoading(false);
       }
     };
+
     loadImages();
   }, [query, currentPage, sortBy]);
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
-  const handleSortChange = (sort: 'relevant' | 'latest') => {
+  const handleSortChange = useCallback((sort: SortOption) => {
     setSortBy(sort);
     setCurrentPage(1);
-  };
+  }, []);
 
-  const handleOpenModal = (index: number) => setModalIndex(index);
-  const handleCloseModal = () => setModalIndex(null);
-  const handlePrevImage = () => {
-    if (modalIndex !== null)
+  const handleOpenModal = useCallback(
+    (index: number) => setModalIndex(index),
+    []
+  );
+  const handleCloseModal = useCallback(() => setModalIndex(null), []);
+  const handlePrevImage = useCallback(() => {
+    if (modalIndex !== null) {
       setModalIndex((modalIndex - 1 + images.length) % images.length);
-  };
-  const handleNextImage = () => {
-    if (modalIndex !== null) setModalIndex((modalIndex + 1) % images.length);
-  };
+    }
+  }, [images.length, modalIndex]);
+  const handleNextImage = useCallback(() => {
+    if (modalIndex !== null) {
+      setModalIndex((modalIndex + 1) % images.length);
+    }
+  }, [images.length, modalIndex]);
 
-  if (loading) return <LoadingText>Loading images...</LoadingText>;
-  if (!images.length)
-    return <NoResultsText>No images found for "{query}"</NoResultsText>;
+  if (loading) return <Loader />;
+
+  if (!images.length) {
+    return (
+      <GalleryWrapper>
+        <NoResultsText>
+          The Search Didn't Yield Any Results, Please Try <span>Again</span>.
+        </NoResultsText>
+      </GalleryWrapper>
+    );
+  }
 
   return (
     <GalleryWrapper>

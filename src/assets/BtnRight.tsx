@@ -1,5 +1,3 @@
-import React from 'react';
-
 const BtnRight = () => {
   return (
     <svg
@@ -12,16 +10,16 @@ const BtnRight = () => {
       <path
         d="M1.60596 8H15.3553"
         stroke="white"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M8.48047 1L15.3551 8L8.48047 15"
         stroke="white"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

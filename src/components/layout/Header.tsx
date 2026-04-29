@@ -1,28 +1,34 @@
-import React from 'react';
+import { GALLERY_ROUTE } from '@constants/linkRoutes.ts';
+import { memo, useCallback, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+
+import Logo from '../../assets/Logo';
+import ThemeSwitcher from '../ui/ThemeSwitcher';
 import {
-  HeaderWrapper,
+  BurgerButton,
+  BurgerLine,
+  DesktopThemeSwitcher,
   HeaderContainer,
-  NavbarMenu,
-  MenuList,
+  HeaderWrapper,
+  IconWrapper,
   MenuItem,
   MenuLink,
+  MenuList,
+  MobileMenu,
+  MobileThemeSwitcher,
+  NavbarMenu,
+  SocialIcons,
+  SocialLink,
   StyledLink,
-  IconWrapper,
 } from './Header.styled';
-import Category from '../../assets/CategoryLogo';
-import Images from '../../assets/ImagesLogo';
-import Logo from '../../assets/Logo';
-import Favourites from '../../assets/FavoutitesLogo';
-import {
-  CATEGORY_ROUTE,
-  FAVOURITES_ROUTE,
-  GALLERY_ROUTE,
-  IMAGES_ROUTE,
-} from '../../constants/linkRoutes';
+import { menuItems, socialLinks } from './layoutData';
 
 const Header = () => {
   const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   return (
     <HeaderWrapper>
@@ -30,43 +36,57 @@ const Header = () => {
         <StyledLink to={GALLERY_ROUTE}>
           <Logo />
         </StyledLink>
+
+        <BurgerButton onClick={toggleMenu} $open={menuOpen}>
+          <BurgerLine $open={menuOpen} />
+          <BurgerLine $open={menuOpen} />
+          <BurgerLine $open={menuOpen} />
+        </BurgerButton>
+
         <NavbarMenu>
           <MenuList>
-            <MenuItem $isActive={location.pathname === GALLERY_ROUTE}>
-              <Link to={CATEGORY_ROUTE} className="menu-link">
-                <IconWrapper>
-                  <Category />
-                </IconWrapper>
-                <MenuLink $isActive={location.pathname === CATEGORY_ROUTE}>
-                  Category
-                </MenuLink>
-              </Link>
-            </MenuItem>
-            <MenuItem $isActive={location.pathname === IMAGES_ROUTE}>
-              <Link to={IMAGES_ROUTE} className="menu-link">
-                <IconWrapper>
-                  <Images />
-                </IconWrapper>
-                <MenuLink $isActive={location.pathname === IMAGES_ROUTE}>
-                  Images
-                </MenuLink>
-              </Link>
-            </MenuItem>
-            <MenuItem $isActive={location.pathname === FAVOURITES_ROUTE}>
-              <Link to={FAVOURITES_ROUTE} className="menu-link">
-                <IconWrapper>
-                  <Favourites />
-                </IconWrapper>
-                <MenuLink $isActive={location.pathname === FAVOURITES_ROUTE}>
-                  Favourites
-                </MenuLink>
-              </Link>
-            </MenuItem>
+            {menuItems.map(({ label, path, Icon }) => (
+              <MenuItem key={path} $isActive={location.pathname === path}>
+                <Link to={path} className="menu-link">
+                  <IconWrapper>
+                    <Icon />
+                  </IconWrapper>
+                  <MenuLink $isActive={location.pathname === path}>
+                    {label}
+                  </MenuLink>
+                </Link>
+              </MenuItem>
+            ))}
           </MenuList>
         </NavbarMenu>
+        <DesktopThemeSwitcher>
+          <ThemeSwitcher />
+        </DesktopThemeSwitcher>
       </HeaderContainer>
+
+      <MobileMenu $open={menuOpen}>
+        <MobileThemeSwitcher>
+          <ThemeSwitcher />
+        </MobileThemeSwitcher>
+
+        {menuItems.map(({ label, path }) => (
+          <MenuItem key={path} onClick={closeMenu}>
+            <Link to={path} className="menu-link">
+              <span>{label}</span>
+            </Link>
+          </MenuItem>
+        ))}
+
+        <SocialIcons>
+          {socialLinks.map(({ key, Icon }) => (
+            <SocialLink key={key} href="#">
+              <Icon />
+            </SocialLink>
+          ))}
+        </SocialIcons>
+      </MobileMenu>
     </HeaderWrapper>
   );
 };
 
-export default Header;
+export default memo(Header);

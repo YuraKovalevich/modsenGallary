@@ -1,17 +1,17 @@
-import React from 'react';
-import { GalleryWrapper, ImageGrid } from './Images.styled';
+import { useFavoritesContext } from '@/components/common/useFavoritesContext';
+import ImageCardComponent from '@/components/layout/ImageCard';
+import type { UnsplashImage } from '@/services/unsplashApi';
+
+import { GalleryWrapper, ImageGrid } from '../Images/styles';
 import {
-  FavouritesContainer,
   EmptyState,
   EmptyStateTitle,
+  FavouritesContainer,
   FavouritesText,
-} from './Favourites.styled';
-import ImageCardComponent from '../components/layout/ImageCard';
-import { useFavorites } from '../hooks/UseFavorites';
-import type { UnsplashImage } from '../components/common/FavoritesContext';
+} from './styles';
 
-const Favourites: React.FC = () => {
-  const { favorites } = useFavorites();
+const Favourites = () => {
+  const { favorites } = useFavoritesContext();
 
   if (favorites.length === 0) {
     return (
@@ -37,11 +37,7 @@ const Favourites: React.FC = () => {
         </FavouritesText>
         <ImageGrid>
           {favorites.map((image: UnsplashImage) => (
-            <ImageCardComponent
-              key={image.id}
-              image={image}
-              onClick={() => {}}
-            />
+            <ImageCardComponent key={image.id} image={image} />
           ))}
         </ImageGrid>
       </FavouritesContainer>

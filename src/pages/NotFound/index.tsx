@@ -1,11 +1,10 @@
-import React from 'react';
-import { GalleryWrapper } from './Images.styled';
+import { GalleryWrapper } from '../Images/styles';
 import {
   NotFoundContainer,
   NotFoundNumbers,
   NotFoundSubstr,
   NotFoundText,
-} from './NotFound.styled';
+} from './styles';
 
 const NotFound = () => {
   return (

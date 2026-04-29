@@ -1,98 +1,50 @@
-import React from 'react';
+import { memo } from 'react';
+
 import Logo from '../../assets/Logo';
-import Twitter from '../../assets/Twitter';
-import Facebook from '../../assets/Facebook';
-import Inst from '../../assets/Inst';
-import Github from '../../assets/Github';
-import {
-  FooterWrapper,
-  FooterContainer,
-  FooterContent,
-  FooterGallery,
-  GalleryText,
-  GalleryShare,
-  FooterRights,
-  Section,
-  SectionTitle,
-  LinksList,
-  StyledLink,
-  SocialLink,
-} from './Footer.styled';
+import * as S from './Footer.styled';
+import { footerSections, socialLinks } from './layoutData';
 
 const Footer = () => {
   return (
-    <FooterWrapper>
-      <FooterContainer>
-        <FooterContent>
-          <FooterGallery>
+    <S.FooterWrapper>
+      <S.FooterContainer>
+        <S.FooterContent>
+          <S.FooterGallery>
             <Logo />
-            <GalleryText>
+            <S.GalleryText>
               We have images that capture every mood and inspire every vision.
               From breathtaking landscapes to vibrant portraits.
-            </GalleryText>
-            <GalleryShare>
-              <SocialLink to={'/'}>
-                <Twitter />
-              </SocialLink>
-              <SocialLink to={'/'}>
-                <Facebook />
-              </SocialLink>
-              <SocialLink to={'/'}>
-                <Inst />
-              </SocialLink>
-              <SocialLink to={'/'}>
-                <Github />
-              </SocialLink>
-            </GalleryShare>
-          </FooterGallery>
+            </S.GalleryText>
+            <S.GalleryShare>
+              {socialLinks.map(({ key, Icon }) => (
+                <S.SocialLink key={key} to="/">
+                  <Icon />
+                </S.SocialLink>
+              ))}
+            </S.GalleryShare>
+          </S.FooterGallery>
+          <S.SectionWrapper>
+            {footerSections.map(({ title, links }) => (
+              <S.Section key={title}>
+                <S.SectionTitle>{title}</S.SectionTitle>
+                <S.LinksList>
+                  {links.map((label) => (
+                    <S.StyledLink key={label} to="/">
+                      {label}
+                    </S.StyledLink>
+                  ))}
+                </S.LinksList>
+              </S.Section>
+            ))}
+          </S.SectionWrapper>
+        </S.FooterContent>
 
-          <Section>
-            <SectionTitle>COMPANY</SectionTitle>
-            <LinksList>
-              <StyledLink to="/">About</StyledLink>
-              <StyledLink to="/">Features</StyledLink>
-              <StyledLink to="/">Works</StyledLink>
-              <StyledLink to="/">Career</StyledLink>
-            </LinksList>
-          </Section>
-
-          <Section>
-            <SectionTitle>HELP</SectionTitle>
-            <LinksList>
-              <StyledLink to="/">Customer Support</StyledLink>
-              <StyledLink to="/">Delivery Details</StyledLink>
-              <StyledLink to="/">Terms & Conditions</StyledLink>
-              <StyledLink to="/">Privacy Policy</StyledLink>
-            </LinksList>
-          </Section>
-
-          <Section>
-            <SectionTitle>FAQ</SectionTitle>
-            <LinksList>
-              <StyledLink to="/">Account</StyledLink>
-              <StyledLink to="/">Manage Deliveries</StyledLink>
-              <StyledLink to="/">Orders</StyledLink>
-              <StyledLink to="/">Payments</StyledLink>
-            </LinksList>
-          </Section>
-
-          <Section>
-            <SectionTitle>RESOURCES</SectionTitle>
-            <LinksList>
-              <StyledLink to="/">Free eBooks</StyledLink>
-              <StyledLink to="/">Development Tutorial</StyledLink>
-              <StyledLink to="/">How to - Blog</StyledLink>
-              <StyledLink to="/">Youtube Playlist</StyledLink>
-            </LinksList>
-          </Section>
-        </FooterContent>
-
-        <FooterRights>
+        <S.FooterRights>
           Modsen.gallery © 2000-2025, All Rights Reserved
-        </FooterRights>
-      </FooterContainer>
-    </FooterWrapper>
+        </S.FooterRights>
+      </S.FooterContainer>
+    </S.FooterWrapper>
   );
 };
 
-export default Footer;
+export default memo(Footer);

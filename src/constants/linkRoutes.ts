@@ -1,5 +1,15 @@
-export const GALLERY_ROUTE = '/';
-export const CATEGORY_ROUTE = '/';
-export const IMAGES_ROUTE = '/images';
-export const FAVOURITES_ROUTE = '/favourites';
-export const NOTFOUND_ROUTE = '/404';
+export const linkRoutes = {
+  gallery: '/',
+  category: '/',
+  images: '/images',
+  favourites: '/favourites',
+  notFound: '/404',
+} as const;
+
+export const {
+  gallery: GALLERY_ROUTE,
+  category: CATEGORY_ROUTE,
+  images: IMAGES_ROUTE,
+  favourites: FAVOURITES_ROUTE,
+  notFound: NOTFOUND_ROUTE,
+} = linkRoutes;

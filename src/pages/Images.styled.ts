@@ -3,26 +3,26 @@ import styled from 'styled-components';
 export const ImageGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
-  margin-bottom: 40px;
+  gap: ${({ theme }) => theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.xxl};
 
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 16px;
+    gap: ${({ theme }) => theme.spacing.md};
   }
 `;
 
 export const ImageCard = styled.div`
-  background: #f0f1f1;
-  border-radius: 1px;
+  background: ${({ theme }) => theme.colors.bgLight};
+  border-radius: ${({ theme }) => theme.radius.none};
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: ${({ theme }) => theme.shadow.sm};
   transition: all 0.3s ease;
   cursor: pointer;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: ${({ theme }) => theme.shadow.lg};
   }
 `;
 
@@ -37,9 +37,11 @@ export const ImageInfo = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 10px 10px 10px;
+  padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.sm}
+    ${({ theme }) => theme.spacing.sm};
   min-height: 60px;
 `;
+
 export const StyledImage = styled.img`
   width: 100%;
   height: 240px;
@@ -48,13 +50,14 @@ export const StyledImage = styled.img`
 `;
 
 export const ImageTitle = styled.h3`
-  font-family: 'Lexend Deca';
-  font-size: 18px;
+  font-family: ${({ theme }) => theme.font.main};
+  font-size: ${({ theme }) => theme.fontSize.lg};
   font-weight: 500;
-  color: #333;
+  color: ${({ theme }) => theme.colors.textPrimary};
   margin: 0;
   line-height: 1.4;
   max-width: 219px;
+
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -65,31 +68,41 @@ export const Pagination = styled.div`
   display: flex;
   justify-content: end;
   align-items: center;
-  gap: 8px;
-  margin-top: 40px;
+  gap: ${({ theme }) => theme.spacing.sm};
+  margin-top: ${({ theme }) => theme.spacing.xxl};
 `;
 
 export const PageButton = styled.button<{ $active?: boolean }>`
-  font-family: 'Lexend Deca';
+  font-family: ${({ theme }) => theme.font.main};
   font-weight: 600;
-  padding: 8px 12px;
-  border: 1px solid ${(props) => (props.$active ? '#F17900' : '#ddd')};
-  background: ${(props) => (props.$active ? '#F17900' : '#fff')};
-  color: ${(props) => (props.$active ? '#fff' : '#000')};
-  border-radius: 4px;
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+
+  border: 1px solid
+    ${({ $active, theme }) =>
+      $active ? theme.colors.primary : theme.colors.border};
+
+  background: ${({ $active, theme }) =>
+    $active ? theme.colors.primary : theme.colors.white};
+
+  color: ${({ $active, theme }) =>
+    $active ? theme.colors.white : theme.colors.black};
+
+  border-radius: ${({ theme }) => theme.radius.sm};
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 18px;
+  font-size: ${({ theme }) => theme.fontSize.lg};
+
   min-width: 30px;
   height: 30px;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover:not(:disabled) {
-    background: #f17900;
-    color: #fff;
-    border-color: #f17900;
+    background: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.white};
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 
   &:disabled {
@@ -97,15 +110,16 @@ export const PageButton = styled.button<{ $active?: boolean }>`
     cursor: not-allowed;
   }
 `;
+
 export const GalleryWrapper = styled.div`
-  background: #fff;
-  padding: 40px 0;
+  background: ${({ theme }) => theme.colors.white};
+  padding: ${({ theme }) => theme.spacing.xl} 0;
 `;
 
 export const GalleryContainer = styled.div<{ $blur?: boolean }>`
-  max-width: 1310px;
+  max-width: ${({ theme }) => theme.layout.containerMaxWidth};
   margin: 0 auto;
-  padding: 0 15px;
+  padding: 0 ${({ theme }) => theme.spacing.sm};
   transition: filter 0.3s ease;
 
   ${({ $blur }) =>
@@ -118,13 +132,15 @@ export const GalleryContainer = styled.div<{ $blur?: boolean }>`
 export const ArrowButton = styled.button`
   width: 30px;
   height: 30px;
-  border: 1px solid #ddd;
-  background: #fff;
-  border-radius: 4px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.white};
+  border-radius: ${({ theme }) => theme.radius.sm};
   cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   position: relative;
   transition: all 0.3s ease;
 
@@ -132,86 +148,82 @@ export const ArrowButton = styled.button`
     content: '';
     width: 8px;
     height: 8px;
-    border-top: 2px solid #000;
-    border-right: 2px solid #000;
+    border-top: 2px solid ${({ theme }) => theme.colors.black};
+    border-right: 2px solid ${({ theme }) => theme.colors.black};
     transform: rotate(45deg);
-    transition: border-color 0.3s ease;
   }
 
   &:hover:not(:disabled) {
-    background: #f17900;
-    border-color: #f17900;
+    background: ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme }) => theme.colors.primary};
 
     &::before {
-      border-color: #fff;
+      border-color: ${({ theme }) => theme.colors.white};
     }
   }
 
   &:disabled {
     opacity: 0.4;
-    cursor: not-allowed;
-
-    &::before {
-      border-color: #999;
-    }
   }
 `;
 
 export const LoadingText = styled.p`
   text-align: center;
-  font-size: 18px;
-  color: #666;
-  padding: 60px 0;
+  font-size: ${({ theme }) => theme.fontSize.lg};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  padding: ${({ theme }) => theme.spacing.xxxl} 0;
 `;
 
 export const SortContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
-  gap: 16px;
-  margin-bottom: 30px;
-  padding: 0 15px;
-  max-width: 1310px;
+  gap: ${({ theme }) => theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  padding: 0 ${({ theme }) => theme.spacing.sm};
+  max-width: ${({ theme }) => theme.layout.containerMaxWidth};
   margin-left: auto;
   margin-right: auto;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    justify-content: center;
+  }
 `;
 
 export const SortLabel = styled.span`
-  font-family: 'Lexend Deca';
-  font-size: 16px;
-  color: #666;
-  font-weight: 400;
+  font-family: ${({ theme }) => theme.font.main};
+  font-size: ${({ theme }) => theme.fontSize.md};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 export const SortDropdown = styled.div`
   position: relative;
   display: inline-block;
-  color: #c4c4c4;
 `;
 
 export const DropdownHeader = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: #ffffff;
-  border: 1px solid #c4c4c4;
-  border-radius: 6px;
-  cursor: pointer;
-  font-family: 'Lexend Deca';
-  font-size: 14px;
-  color: #c4c4c4;
-  min-width: 120px;
   justify-content: space-between;
-  transition: all 0.2s ease;
+
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+
+  background: ${({ theme }) => theme.colors.white};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.sm};
+
+  cursor: pointer;
+  min-width: 120px;
+
+  font-family: ${({ theme }) => theme.font.main};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 export const DropdownArrow = styled.span<{ $isOpen: boolean }>`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  transform: ${({ $isOpen }) => ($isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
   transition: transform 0.2s ease;
-  transform: ${(props) => (props.$isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 
 export const DropdownList = styled.ul`
@@ -219,25 +231,31 @@ export const DropdownList = styled.ul`
   top: 100%;
   left: 0;
   right: 0;
-  background: #fff;
-  border: 1px solid #c4c4c4;
-  border-radius: 1px;
-  margin-top: 4px;
-  padding: 4px;
+
+  margin-top: ${({ theme }) => theme.spacing.xs};
+  padding: ${({ theme }) => theme.spacing.xs};
+
   list-style: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  background: ${({ theme }) => theme.colors.white};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.sm};
+
+  box-shadow: ${({ theme }) => theme.shadow.sm};
   z-index: 1000;
 `;
 
 export const DropdownItem = styled.li<{ $active?: boolean }>`
-  padding: 8px 12px;
-  font-family: 'Lexend Deca';
-  font-size: 14px;
-  border-radius: 4px;
+  padding: ${({ theme }) => theme.spacing.sm};
+  font-family: ${({ theme }) => theme.font.main};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+
+  border-radius: ${({ theme }) => theme.radius.sm};
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: ${(props) => (props.$active ? '500' : '400')};
+
+  font-weight: ${({ $active }) => ($active ? 500 : 400)};
 `;
+
 export const ArrowIcon = styled.div`
   width: 12px;
   height: 12px;
@@ -250,55 +268,56 @@ export const ArrowIcon = styled.div`
     left: 50%;
     width: 6px;
     height: 6px;
-    border-bottom: 2px solid #333;
-    border-right: 2px solid #333;
+    border-bottom: 2px solid ${({ theme }) => theme.colors.textPrimary};
+    border-right: 2px solid ${({ theme }) => theme.colors.textPrimary};
     transform: translate(-50%, -50%) rotate(45deg);
-    transition: transform 0.2s ease;
   }
 `;
+
 export const FavoriteIconWrapper = styled.div<{ $isFavorite?: boolean }>`
   cursor: pointer;
-  padding: 8px;
+  padding: ${({ theme }) => theme.spacing.sm};
   border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+
   transition: all 0.3s ease;
 
-  background: ${({ $isFavorite }) => ($isFavorite ? '#fff' : 'transparent')};
+  background: ${({ $isFavorite, theme }) =>
+    $isFavorite ? theme.colors.white : 'transparent'};
+
   svg {
-    fill: ${({ $isFavorite }) => ($isFavorite ? '#F17900' : 'transparent')};
-    transition: fill 0.3s ease;
-  }
-  &:hover {
-    background: rgba(255, 255, 255, 0.8);
-    transform: scale(1.1);
+    fill: ${({ $isFavorite, theme }) =>
+      $isFavorite ? theme.colors.primary : 'transparent'};
   }
 
-  &:active {
-    transform: scale(0.95);
+  &:hover {
+    transform: scale(1.1);
+    background: ${({ theme }) => theme.colors.white};
   }
 `;
 
 export const FavoriteButton = styled.div<{ $isFavorite?: boolean }>`
   cursor: pointer;
-  padding: 8px;
+  padding: ${({ theme }) => theme.spacing.sm};
   border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+
   transition: all 0.3s ease;
 
   svg {
-    fill: ${({ $isFavorite }) => ($isFavorite ? '#F17900' : '#FFF')};
-    transition: fill 0.3s ease;
+    fill: ${({ $isFavorite, theme }) =>
+      $isFavorite ? theme.colors.primary : theme.colors.white};
   }
 
   &:hover {
     transform: scale(1.1);
-    background: #fff;
+    background: ${({ theme }) => theme.colors.white};
   }
 
   &:active {

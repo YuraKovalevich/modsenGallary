@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CloseBtn = () => {
   return (
     <svg
@@ -10,14 +8,14 @@ const CloseBtn = () => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M0 2.45281L2.45281 0L12.5 10.0472L22.5472 0L25 2.45281L12.5 14.9528L0 2.45281Z"
         fill="#FBFBFB"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M0 22.9064L2.45281 25.3593L12.5 15.3121L22.5472 25.3593L25 22.9064L12.5 10.4064L0 22.9064Z"
         fill="#FBFBFB"
       />

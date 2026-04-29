@@ -1,3 +1,5 @@
+import { SORT_OPTIONS, type SortOption } from '@/constants/sort';
+
 const UNSPLASH_API_URL = 'https://api.unsplash.com';
 
 export interface UnsplashImage {
@@ -7,7 +9,7 @@ export interface UnsplashImage {
     regular: string;
     full: string;
   };
-  alt_description: string | null;
+  altDescription: string | null;
   description?: string | null;
   user: {
     name: string;
@@ -22,14 +24,67 @@ export interface UnsplashCategoryImage {
     regular?: string;
     small?: string;
   };
-  alt_description?: string | null;
+  altDescription?: string | null;
 }
 
 export interface SearchResponse {
   results: UnsplashImage[];
   total: number;
-  total_pages: number;
+  totalPages: number;
 }
+
+interface RawUnsplashImage {
+  id?: unknown;
+  urls?: {
+    small?: unknown;
+    regular?: unknown;
+    full?: unknown;
+  };
+  alt_description?: unknown;
+  description?: unknown;
+  user?: {
+    name?: unknown;
+    username?: unknown;
+  };
+  likes?: unknown;
+}
+
+interface RawSearchResponse {
+  results?: unknown;
+  total?: unknown;
+  total_pages?: unknown;
+}
+
+const normalizeImage = (image: RawUnsplashImage): UnsplashImage => ({
+  id: typeof image.id === 'string' ? image.id : '',
+  urls: {
+    small: typeof image.urls?.small === 'string' ? image.urls.small : '',
+    regular: typeof image.urls?.regular === 'string' ? image.urls.regular : '',
+    full: typeof image.urls?.full === 'string' ? image.urls.full : '',
+  },
+  altDescription:
+    typeof image.alt_description === 'string' ? image.alt_description : null,
+  description: typeof image.description === 'string' ? image.description : null,
+  user: {
+    name: typeof image.user?.name === 'string' ? image.user.name : '',
+    username:
+      typeof image.user?.username === 'string' ? image.user.username : '',
+  },
+  likes: typeof image.likes === 'number' ? image.likes : 0,
+});
+
+const normalizeCategoryImage = (
+  image: RawUnsplashImage
+): UnsplashCategoryImage => ({
+  id: typeof image.id === 'string' ? image.id : '',
+  urls: {
+    regular:
+      typeof image.urls?.regular === 'string' ? image.urls.regular : undefined,
+    small: typeof image.urls?.small === 'string' ? image.urls.small : undefined,
+  },
+  altDescription:
+    typeof image.alt_description === 'string' ? image.alt_description : null,
+});
 
 const KEY =
   (import.meta.env.VITE_UNSPLASH_ACCESS_KEY as string) ||
@@ -53,15 +108,15 @@ async function fetchWithErrorHandling(url: string, signal?: AbortSignal) {
 }
 
 export async function getRandomImages(
-  a: number = 12,
-  b?: number,
+  pageOrPerPage: number = 12,
+  maybePerPage?: number,
   signal?: AbortSignal
 ): Promise<UnsplashImage[]> {
   let perPage = 12;
-  if (b === undefined) {
-    perPage = a;
+  if (maybePerPage === undefined) {
+    perPage = pageOrPerPage;
   } else {
-    perPage = b;
+    perPage = maybePerPage;
   }
 
   try {
@@ -69,7 +124,9 @@ export async function getRandomImages(
       `${UNSPLASH_API_URL}/photos/random?count=${perPage}`,
       signal
     );
-    return Array.isArray(data) ? data : [];
+    return Array.isArray(data)
+      ? data.map((image) => normalizeImage(image as RawUnsplashImage))
+      : [];
   } catch (error) {
     console.error('Error fetching random images:', error);
     return [];
@@ -80,24 +137,26 @@ export async function searchImages(
   query: string,
   page: number = 1,
   perPage: number = 12,
-  sort: 'relevant' | 'latest' = 'relevant',
+  sort: SortOption = SORT_OPTIONS.relevant,
   signal?: AbortSignal
 ): Promise<SearchResponse> {
   try {
     const encodedQuery = encodeURIComponent(query);
-    const data = await fetchWithErrorHandling(
+    const data = (await fetchWithErrorHandling(
       `${UNSPLASH_API_URL}/search/photos?query=${encodedQuery}&page=${page}&per_page=${perPage}&order_by=${sort}`,
       signal
-    );
+    )) as RawSearchResponse;
 
     return {
-      results: Array.isArray(data.results) ? data.results : [],
+      results: Array.isArray(data.results)
+        ? data.results.map((image) => normalizeImage(image as RawUnsplashImage))
+        : [],
       total: typeof data.total === 'number' ? data.total : 0,
-      total_pages: typeof data.total_pages === 'number' ? data.total_pages : 0,
+      totalPages: typeof data.total_pages === 'number' ? data.total_pages : 0,
     };
   } catch (error) {
     console.error('Error searching images:', error);
-    return { results: [], total: 0, total_pages: 0 };
+    return { results: [], total: 0, totalPages: 0 };
   }
 }
 
@@ -107,11 +166,16 @@ export async function getCategoryImage(
 ): Promise<UnsplashCategoryImage | null> {
   try {
     const encodedCategory = encodeURIComponent(category);
-    const data = await fetchWithErrorHandling(
+    const data = (await fetchWithErrorHandling(
       `${UNSPLASH_API_URL}/search/photos?query=${encodedCategory}&per_page=1`,
       signal
-    );
-    return data.results?.[0] ?? null;
+    )) as RawSearchResponse;
+
+    const firstImage = Array.isArray(data.results)
+      ? (data.results[0] as RawUnsplashImage | undefined)
+      : undefined;
+
+    return firstImage ? normalizeCategoryImage(firstImage) : null;
   } catch (error) {
     console.error(`Error fetching category image for "${category}":`, error);
     return null;
@@ -128,7 +192,9 @@ export async function getFeaturedImages(
       `${UNSPLASH_API_URL}/photos?page=${page}&per_page=${perPage}&order_by=popular`,
       signal
     );
-    return Array.isArray(data) ? data : [];
+    return Array.isArray(data)
+      ? data.map((image) => normalizeImage(image as RawUnsplashImage))
+      : [];
   } catch (error) {
     console.error('Error fetching featured images:', error);
     return [];
