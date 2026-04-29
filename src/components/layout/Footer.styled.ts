@@ -70,6 +70,9 @@ export const SocialLink = styled(Link)`
     fill: ${({ theme }) => theme.colors.accent};
     stroke: ${({ theme }) => theme.colors.white};
   }
+  &:hover path {
+    fill: ${({ theme }) => theme.colors.white};
+  }
 `;
 
 export const SectionWrapper = styled.div`

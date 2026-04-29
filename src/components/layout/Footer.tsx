@@ -1,45 +1,8 @@
-import Facebook from '../../assets/Facebook';
-import Github from '../../assets/Github';
-import Inst from '../../assets/Inst';
+import { memo } from 'react';
+
 import Logo from '../../assets/Logo';
-import Twitter from '../../assets/Twitter';
 import * as S from './Footer.styled';
-
-const socialLinks = [
-  { key: 'twitter', Icon: Twitter },
-  { key: 'facebook', Icon: Facebook },
-  { key: 'instagram', Icon: Inst },
-  { key: 'github', Icon: Github },
-];
-
-const footerSections = [
-  {
-    title: 'COMPANY',
-    links: ['About', 'Features', 'Works', 'Career'],
-  },
-  {
-    title: 'HELP',
-    links: [
-      'Customer Support',
-      'Delivery Details',
-      'Terms & Conditions',
-      'Privacy Policy',
-    ],
-  },
-  {
-    title: 'FAQ',
-    links: ['Account', 'Manage Deliveries', 'Orders', 'Payments'],
-  },
-  {
-    title: 'RESOURCES',
-    links: [
-      'Free eBooks',
-      'Development Tutorial',
-      'How to - Blog',
-      'Youtube Playlist',
-    ],
-  },
-];
+import { footerSections, socialLinks } from './layoutData';
 
 const Footer = () => {
   return (
@@ -84,4 +47,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default memo(Footer);

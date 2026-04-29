@@ -98,6 +98,7 @@ export const BurgerButton = styled.div<{ $open?: boolean }>`
   justify-content: space-between;
   cursor: pointer;
   z-index: ${({ theme }) => theme.zIndex.modalContent};
+  position: relative;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     display: flex;
@@ -109,13 +110,31 @@ export const BurgerLine = styled.span<{ $open?: boolean }>`
   width: 100%;
   background: ${({ theme }) => theme.colors.accent};
   border-radius: ${({ theme }) => theme.radius.sm};
-  transition: all 0.3s ease;
+  position: absolute;
+  left: 0;
+  transition:
+    transform 0.3s ease,
+    opacity 0.2s ease;
+
+  &:nth-child(1) {
+    top: 0;
+  }
+
+  &:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &:nth-child(3) {
+    bottom: 0;
+  }
 
   ${({ $open }) =>
     $open &&
     `
     &:nth-child(1) {
-      transform: rotate(45deg) translate(4px, 4px);
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
     }
 
     &:nth-child(2) {
@@ -123,7 +142,9 @@ export const BurgerLine = styled.span<{ $open?: boolean }>`
     }
 
     &:nth-child(3) {
-      transform: rotate(-45deg) translate(4px, -4px);
+      bottom: auto;
+      top: 50%;
+      transform: translateY(-50%) rotate(-45deg);
     }
   `}
 `;
@@ -163,6 +184,24 @@ export const MobileMenu = styled.div<{ $open?: boolean }>`
     &:hover {
       color: ${({ theme }) => theme.colors.accent};
     }
+  }
+`;
+
+export const DesktopThemeSwitcher = styled.div`
+  display: flex;
+  align-items: center;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: none;
+  }
+`;
+
+export const MobileThemeSwitcher = styled.div`
+  display: none;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: flex;
+    justify-content: center;
   }
 `;
 

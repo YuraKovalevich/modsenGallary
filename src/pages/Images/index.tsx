@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 
 import { NoResultsText } from '@/components/layout/FindImages.styled';
@@ -55,28 +55,31 @@ const Images = () => {
     loadImages();
   }, [query, currentPage, sortBy]);
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
-  const handleSortChange = (sort: SortOption) => {
+  const handleSortChange = useCallback((sort: SortOption) => {
     setSortBy(sort);
     setCurrentPage(1);
-  };
+  }, []);
 
-  const handleOpenModal = (index: number) => setModalIndex(index);
-  const handleCloseModal = () => setModalIndex(null);
-  const handlePrevImage = () => {
+  const handleOpenModal = useCallback(
+    (index: number) => setModalIndex(index),
+    []
+  );
+  const handleCloseModal = useCallback(() => setModalIndex(null), []);
+  const handlePrevImage = useCallback(() => {
     if (modalIndex !== null) {
       setModalIndex((modalIndex - 1 + images.length) % images.length);
     }
-  };
-  const handleNextImage = () => {
+  }, [images.length, modalIndex]);
+  const handleNextImage = useCallback(() => {
     if (modalIndex !== null) {
       setModalIndex((modalIndex + 1) % images.length);
     }
-  };
+  }, [images.length, modalIndex]);
 
   if (loading) return <Loader />;
 

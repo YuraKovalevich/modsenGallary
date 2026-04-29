@@ -1,5 +1,6 @@
 import { ImageGrid } from '@pages/Images.styled.ts';
 import type { UnsplashImage } from '@services/unsplashApi.ts';
+import { memo, useCallback } from 'react';
 
 import ImageCard from './ImageCard';
 
@@ -9,11 +10,14 @@ interface Props {
 }
 
 const ImageGridComponent: React.FC<Props> = ({ images, onImageClick }) => {
-  const handleImageClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const index = Number(event.currentTarget.dataset.index ?? -1);
-    if (index < 0) return;
-    onImageClick?.(index);
-  };
+  const handleImageClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      const index = Number(event.currentTarget.dataset.index ?? -1);
+      if (index < 0) return;
+      onImageClick?.(index);
+    },
+    [onImageClick]
+  );
 
   return (
     <ImageGrid>
@@ -29,4 +33,4 @@ const ImageGridComponent: React.FC<Props> = ({ images, onImageClick }) => {
   );
 };
 
-export default ImageGridComponent;
+export default memo(ImageGridComponent);

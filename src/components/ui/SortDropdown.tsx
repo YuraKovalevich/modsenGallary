@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { SORT_OPTIONS, type SortOption } from '@/constants/sort';
 import {
@@ -25,7 +25,7 @@ const sortLabels: Record<SortOption, string> = {
 const SortDropdownComponent: React.FC<Props> = ({ sortBy, onSortChange }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const selectedLabel = useMemo(() => sortLabels[sortBy], [sortBy]);
+  const selectedLabel = sortLabels[sortBy];
 
   const toggleDropdown = () => {
     setIsOpen((prevState) => !prevState);

@@ -1,4 +1,5 @@
 import { ArrowButton, PageButton, Pagination } from '@pages/Images.styled.ts';
+import { memo, useCallback, useMemo } from 'react';
 
 interface Props {
   currentPage: number;
@@ -11,23 +12,31 @@ const PaginationComponent: React.FC<Props> = ({
   totalPages,
   onPageChange,
 }) => {
+  const pages = useMemo(
+    () =>
+      totalPages > 1
+        ? Array.from({ length: totalPages }, (_, idx) => idx + 1)
+        : [],
+    [totalPages]
+  );
+
+  const handlePageButtonClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      const page = Number(event.currentTarget.dataset.page ?? 1);
+      onPageChange(page);
+    },
+    [onPageChange]
+  );
+
+  const handleNextPageClick = useCallback(() => {
+    onPageChange(Math.min(currentPage + 1, totalPages));
+  }, [currentPage, onPageChange, totalPages]);
+
   if (totalPages <= 1) return null;
-
-  const handlePageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    const page = Number(event.currentTarget.dataset.page ?? 1);
-    onPageChange(page);
-  };
-
-  const handleNextPageClick = () => {
-    onPageChange(currentPage + 1);
-  };
 
   return (
     <Pagination>
-      {[...Array(totalPages)].map((_, idx) => {
-        const page = idx + 1;
+      {pages.map((page) => {
         return (
           <PageButton
             key={page}
@@ -47,4 +56,4 @@ const PaginationComponent: React.FC<Props> = ({
   );
 };
 
-export default PaginationComponent;
+export default memo(PaginationComponent);

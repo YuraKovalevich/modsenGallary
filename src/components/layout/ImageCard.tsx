@@ -6,6 +6,7 @@ import {
   StyledImage,
 } from '@pages/Images.styled.ts';
 import type { UnsplashImage } from '@services/unsplashApi.ts';
+import { memo, useCallback } from 'react';
 
 import FavoutitesLogo from '../../assets/FavoutitesLogo';
 import { useFavoritesContext } from '../common/useFavoritesContext';
@@ -20,10 +21,13 @@ const ImageCardComponent: React.FC<Props> = ({ image, onClick, cardIndex }) => {
   const { toggleFavorite, isFavorite } = useFavoritesContext();
   const favorite = isFavorite(image.id);
 
-  const handleFavoriteClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    toggleFavorite(image);
-  };
+  const handleFavoriteClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      toggleFavorite(image);
+    },
+    [image, toggleFavorite]
+  );
 
   return (
     <ImageCard onClick={onClick} data-index={cardIndex}>
@@ -46,4 +50,4 @@ const ImageCardComponent: React.FC<Props> = ({ image, onClick, cardIndex }) => {
   );
 };
 
-export default ImageCardComponent;
+export default memo(ImageCardComponent);

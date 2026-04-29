@@ -1,24 +1,13 @@
-import {
-  CATEGORY_ROUTE,
-  FAVOURITES_ROUTE,
-  GALLERY_ROUTE,
-  IMAGES_ROUTE,
-} from '@constants/linkRoutes.ts';
-import { useState } from 'react';
+import { GALLERY_ROUTE } from '@constants/linkRoutes.ts';
+import { memo, useCallback, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import Category from '../../assets/CategoryLogo';
-import Facebook from '../../assets/Facebook';
-import Favourites from '../../assets/FavoutitesLogo';
-import Github from '../../assets/Github';
-import Images from '../../assets/ImagesLogo';
-import Inst from '../../assets/Inst';
 import Logo from '../../assets/Logo';
-import Twitter from '../../assets/Twitter';
 import ThemeSwitcher from '../ui/ThemeSwitcher';
 import {
   BurgerButton,
   BurgerLine,
+  DesktopThemeSwitcher,
   HeaderContainer,
   HeaderWrapper,
   IconWrapper,
@@ -26,24 +15,20 @@ import {
   MenuLink,
   MenuList,
   MobileMenu,
+  MobileThemeSwitcher,
   NavbarMenu,
   SocialIcons,
   SocialLink,
   StyledLink,
 } from './Header.styled';
-
-const menuItems = [
-  { label: 'Category', path: CATEGORY_ROUTE, Icon: Category },
-  { label: 'Images', path: IMAGES_ROUTE, Icon: Images },
-  { label: 'Favourites', path: FAVOURITES_ROUTE, Icon: Favourites },
-];
+import { menuItems, socialLinks } from './layoutData';
 
 const Header = () => {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const toggleMenu = () => setMenuOpen((prev) => !prev);
-  const closeMenu = () => setMenuOpen(false);
+  const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   return (
     <HeaderWrapper>
@@ -74,10 +59,16 @@ const Header = () => {
             ))}
           </MenuList>
         </NavbarMenu>
-        <ThemeSwitcher />
+        <DesktopThemeSwitcher>
+          <ThemeSwitcher />
+        </DesktopThemeSwitcher>
       </HeaderContainer>
 
       <MobileMenu $open={menuOpen}>
+        <MobileThemeSwitcher>
+          <ThemeSwitcher />
+        </MobileThemeSwitcher>
+
         {menuItems.map(({ label, path }) => (
           <MenuItem key={path} onClick={closeMenu}>
             <Link to={path} className="menu-link">
@@ -87,22 +78,15 @@ const Header = () => {
         ))}
 
         <SocialIcons>
-          <SocialLink href="#">
-            <Twitter />
-          </SocialLink>
-          <SocialLink href="#">
-            <Facebook />
-          </SocialLink>
-          <SocialLink href="#">
-            <Inst />
-          </SocialLink>
-          <SocialLink href="#">
-            <Github />
-          </SocialLink>
+          {socialLinks.map(({ key, Icon }) => (
+            <SocialLink key={key} href="#">
+              <Icon />
+            </SocialLink>
+          ))}
         </SocialIcons>
       </MobileMenu>
     </HeaderWrapper>
   );
 };
 
-export default Header;
+export default memo(Header);
